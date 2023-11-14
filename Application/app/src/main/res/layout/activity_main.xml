@@ -145,86 +145,6 @@
 
 
         <TextView
-            android:id="@+id/TcpTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TCP"
-            android:textColor="#0D756B"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.213"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.396" />
-
-        <TextView
-            android:id="@+id/downloadTcpTextView"
-            android:layout_width="63dp"
-            android:layout_height="22dp"
-            android:text="Download"
-            android:textColor="#0D756B"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.055"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.567" />
-
-        <TextView
-            android:id="@+id/downloadTcpValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0 mbps"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.072"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.855" />
-
-        <TextView
-            android:id="@+id/uploadTcpTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Upload"
-            android:textColor="#0D756B"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.314"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.567" />
-
-        <TextView
-            android:id="@+id/uploadTcpValue"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="0 mbps"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.31"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.855" />
-
-        <TextView
-            android:id="@+id/udpTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="UDP"
-            android:textColor="#0D756B"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.854"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.396" />
-
-        <TextView
             android:id="@+id/downloadUdpTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -233,7 +153,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.773"
+            app:layout_constraintHorizontal_bias="0.104"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.567" />
@@ -245,10 +165,10 @@
             android:text="0 mbps"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.755"
+            app:layout_constraintHorizontal_bias="0.099"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.783" />
+            app:layout_constraintVertical_bias="0.738" />
 
         <TextView
             android:id="@+id/jitterdownloadUdpValue"
@@ -257,7 +177,7 @@
             android:text="0 ms"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.739"
+            app:layout_constraintHorizontal_bias="0.122"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.954" />
@@ -271,7 +191,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.967"
+            app:layout_constraintHorizontal_bias="0.432"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.567" />
@@ -283,10 +203,10 @@
             android:text="0 mbps"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.97"
+            app:layout_constraintHorizontal_bias="0.435"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.783" />
+            app:layout_constraintVertical_bias="0.738" />
 
         <TextView
             android:id="@+id/jitteruploadUdpValue"
@@ -295,7 +215,7 @@
             android:text="0 ms"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.949"
+            app:layout_constraintHorizontal_bias="0.457"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.954" />
