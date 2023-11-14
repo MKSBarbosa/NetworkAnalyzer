@@ -77,10 +77,10 @@ public class IperfApplication {
         //Log.d("IperfApplication", "Local IP Address: " + localIpAddress);
 
         // Comando para executar o cliente UDP do Iperf
-        String udpCommand = "iperf3 -c 192.168.1.5 -u -t 10";
+        String udpCommand = "iperf3 -c 192.168.70.135 -u -t 10";
 
 //        // Comando para executar o cliente TCP do Iperf
-//        String tcpCommand = "iperf3 -c 192.168.1.5 -t 10 -p 5002";
+//        String tcpCommand = "iperf3 -c 172.27.9.47 -t 10 -p 5002";
 
         try {
             // Executa o cliente UDP e captura a saída

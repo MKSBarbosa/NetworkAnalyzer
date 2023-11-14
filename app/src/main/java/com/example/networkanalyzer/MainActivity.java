@@ -29,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView sinrValue;
 
+    private TextView pingValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         Log.d("Initial", "On creating ...");
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity {
         rsrqValue = findViewById(R.id.rsrqValue);
         sinrValue = findViewById(R.id.sinrValue);
 
+        pingValue = findViewById(R.id.pingValue);
+
         // Crie uma instância de IperfApplication
         IperfApplication iperfApp = new IperfApplication(this,uploadTcpValue, uploadUdpValue, jitteruploadUdpValue,
                 downloadTcpValue, downloadUdpValue, jitterdownloadUdpValue);
@@ -61,9 +65,8 @@ public class MainActivity extends AppCompatActivity {
             // Se a permissão foi concedida, chame a função updateRadioInfo
             radioApp.updateRadioInfo(this);
             uploadTcpValue.setText("80 Mbps");
+            pingValue.setText("0 ms");
         }
-
-
 
         // Verifique se a permissão de acesso à rede já foi concedida
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {

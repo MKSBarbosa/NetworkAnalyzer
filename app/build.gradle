@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace 'com.example.networkanalyzer'
-    compileSdk 33
+    compileSdkVersion 34
 
     defaultConfig {
         applicationId "com.example.networkanalyzer"
-        minSdk 33
-        targetSdk 33
+        minSdkVersion 30
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
