@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 downloadTcpValue, downloadUdpValue, jitterdownloadUdpValue);
         
         RadioApplication radioApp = new RadioApplication(rsrpValue, rsrqValue, sinrValue);
+        PingApplication pingApp = new PingApplication(this, pingValue);
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Se a permissão ACCESS_FINE_LOCATION não foi concedida, solicite-a ao usuário
@@ -64,8 +65,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             // Se a permissão foi concedida, chame a função updateRadioInfo
             radioApp.updateRadioInfo(this);
+            pingApp.getLatency();
             uploadTcpValue.setText("80 Mbps");
-            pingValue.setText("0 ms");
         }
 
         // Verifique se a permissão de acesso à rede já foi concedida
