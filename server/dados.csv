@@ -1,0 +1,4 @@
+rsrp,rsrq,snr,dowload,upload,jitter,ping,vazao,tempoDeCarregamento
+1,,,,,,,,
+1,,,,20,,,,
+valor_rsrp,valor_rsrq,valor_snr,valor_dowload,valor_upload,valor_jitter,valor_ping,valor_vazao,valor_tempoDeCarregamento
