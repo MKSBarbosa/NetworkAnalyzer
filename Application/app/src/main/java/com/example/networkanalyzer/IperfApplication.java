@@ -8,7 +8,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.List;
+import java.util.SplittableRandom;
 
 import android.content.Context;
 import android.util.Log;
@@ -16,27 +20,18 @@ import android.widget.TextView;
 
 public class IperfApplication {
     private final Context context;
-    private TextView uploadTcpValue;
     private TextView uploadUdpValue;
     private TextView jitteruploadUdpValue;
-    private TextView downloadTcpValue;
     private TextView downloadUdpValue;
     private TextView jitterdownloadUdpValue;
 
-
-
-    public IperfApplication(Context context, TextView uploadTcpValue, TextView uploadUdpValue, TextView jitteruploadUdpValue,
-                            TextView downloadTcpValue, TextView downloadUdpValue, TextView jitterdownloadUdpValue) {
-        this.uploadTcpValue = uploadTcpValue;
+    public IperfApplication(Context context, TextView uploadUdpValue, TextView jitteruploadUdpValue,
+                            TextView downloadUdpValue, TextView jitterdownloadUdpValue) {
         this.uploadUdpValue = uploadUdpValue;
         this.jitteruploadUdpValue = jitteruploadUdpValue;
-        this.downloadTcpValue = downloadTcpValue;
         this.downloadUdpValue = downloadUdpValue;
         this.jitterdownloadUdpValue = jitterdownloadUdpValue;
-        // Instale o Iperf no construtor
-
-        this.context = context; // Inicialize o contexto
-//        installIperf(context);
+        this.context = context;
     }
 
 //    private void installIperf(Context context) {
@@ -70,49 +65,67 @@ public class IperfApplication {
 //        }
 //    }
 
-    public void runIperfClient() {
+    public void runIperfClient(String direction) {
+        final List<Double> iperfValues = new ArrayList<>();
+        String udpCommand;
 
-        //String localIpAddress = getLocalIpAddress();
-
-        //Log.d("IperfApplication", "Local IP Address: " + localIpAddress);
-
-        // Comando para executar o cliente UDP do Iperf
-        String udpCommand = "iperf3 -c 192.168.70.135 -u -t 10";
-
-//        // Comando para executar o cliente TCP do Iperf
-//        String tcpCommand = "iperf3 -c 172.27.9.47 -t 10 -p 5002";
-
+        if(direction == "Upload"){
+            udpCommand = "/system/bin/iperf3 -c 192.168.1.2 -u -t 10 -b 20M -i 1";
+        }else{
+            udpCommand = "/system/bin/iperf3 -c 192.168.1.2 -u -t 10 -b 100M -i 1 -R";
+        }
         try {
             // Executa o cliente UDP e captura a saída
             Log.d("Running Iperf", "Initialing ...");
-
             // Crie um processo para executar o Iperf3
-            ProcessBuilder processBuilder = new ProcessBuilder("sh", "-c", udpCommand);
-            Process udpProcess = processBuilder.start();
+            Process udpProcess = Runtime.getRuntime().exec(udpCommand);
             BufferedReader udpReader = new BufferedReader(new InputStreamReader(udpProcess.getInputStream()));
             String udpLine;
             while ((udpLine = udpReader.readLine()) != null) {
                 Log.d("Iperf Client", udpLine);
-                // Atualiza o TextView para mostrar a saída do teste UDP
-                uploadUdpValue.setText(udpLine);
+                if(udpLine.contains("Mbits/sec")){
+                    int startIndex = udpLine.indexOf("Bytes");
+                    int endIndex = udpLine.indexOf("Mbits/sec");
+                    String bandwidth = udpLine.substring(startIndex + 7, endIndex);
+                    Log.d("Iperf Client", "Bandwidth: "+ bandwidth);
+                    iperfValues.add(Double.valueOf(bandwidth));
+                    if (udpLine.contains("receiver")) {
+                        //getting the Bitrate report and the Jitter from the reciever
+                        int endIndexJitter = udpLine.indexOf("ms");
+
+                        String bandwidthReceiver = udpLine.substring(startIndex + 7, endIndex);
+                        String jitterReceiver = udpLine.substring(endIndex + 11, endIndexJitter);
+
+                        if (direction == "Upload"){
+                            uploadUdpValue.setText(bandwidthReceiver + " Mbps");
+                            jitteruploadUdpValue.setText(jitterReceiver + " ms");
+                            Log.d("Iperf Client", "Bandwidth Upload: "+ bandwidthReceiver + " | Jitter Upload = " + jitterReceiver);
+                        } else if (direction == "Download"){
+                            downloadUdpValue.setText(bandwidthReceiver + " Mbps");
+                            jitterdownloadUdpValue.setText(jitterReceiver + " ms");
+                            Log.d("Iperf Client", "Bandwidth Download: "+ bandwidthReceiver + " | Jitter Download = " + bandwidthReceiver);
+                        }
+                    }
+                }
             }
             udpReader.close();
             udpProcess.waitFor();
-
-//            // Executa o cliente TCP e captura a saída
-//            Process tcpProcess = Runtime.getRuntime().exec(tcpCommand);
-//            BufferedReader tcpReader = new BufferedReader(new InputStreamReader(tcpProcess.getInputStream()));
-//            String tcpLine;
-//            while ((tcpLine = tcpReader.readLine()) != null) {
-//                System.out.println(tcpLine);
-//                // Atualiza o TextView para mostrar a saída do teste TCP
-//                uploadTcpValue.setText(tcpLine);
-//            }
-//            tcpReader.close();
-//            tcpProcess.waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        DecimalFormat formato = new DecimalFormat("#.###");
+
+        // Calcula a média dos valores iPerf
+        double sum = 0;
+        for (double upload : iperfValues) {
+            sum += upload;
+        }
+        double average = sum / iperfValues.size();
+        String numeroFormatado = formato.format(average);
+
+        Log.d("NetworkAnalyzer", "Average Upload result: " + average + " Mbps");
+
 }
     public void runIperfServer() {
         String localIpAddress = getLocalIpAddress();
