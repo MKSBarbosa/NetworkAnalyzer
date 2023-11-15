@@ -15,6 +15,7 @@ import androidx.core.content.ContextCompat;
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_INTERNET_PERMISSION = 1;
     private static final int REQUEST_LOCATION_PERMISSION = 2;
+    private static final int REQUEST_CODE = 3;
     private TextView uploadUdpValue;
     private TextView jitteruploadUdpValue;
     private TextView downloadUdpValue;
@@ -58,16 +59,22 @@ public class MainActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
             // Se a permissão foi concedida, chame a função updateRadioInfo
-            radioApp.updateRadioInfo(this);
-            pingApp.getLatency();
+            //radioApp.updateRadioInfo(this);
+            //pingApp.getLatency();
         }
         // Verifique se a permissão de acesso à rede já foi concedida
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
             // Se a permissão ainda não foi concedida, solicite-a ao usuário
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, REQUEST_INTERNET_PERMISSION);
         }else{
-            // Execute o cliente Iperf a partir da instância de IperfApplication
-            iperfApp.runIperfClient();
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                // Se a permissão não estiver concedida, solicite-a
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
+            }
+
+            iperfApp.runIperfClient("Upload");
+            iperfApp.runIperfClient("Download");
+
             // Execute o servidor Iperf a partir da instância de IperfApplication
             //iperfApp.runIperfServer();
         }

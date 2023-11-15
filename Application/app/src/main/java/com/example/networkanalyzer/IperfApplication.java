@@ -12,6 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
+import java.util.SplittableRandom;
 
 import android.content.Context;
 import android.util.Log;
@@ -64,43 +65,55 @@ public class IperfApplication {
 //        }
 //    }
 
-    public void runIperfClient() {
+    public void runIperfClient(String direction) {
         final List<Double> iperfValues = new ArrayList<>();
-        // Comando para executar o cliente UDP do Iperf
-        String udpCommand = "/system/bin/iperf -c 192.168.70.135 -u -t 10 -b 100M -i 1";
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // Executa o cliente UDP e captura a saída
-                    Log.d("Running Iperf", "Initialing ...");
-                    // Crie um processo para executar o Iperf3
-                    Process udpProcess = Runtime.getRuntime().exec(udpCommand);
-                    BufferedReader udpReader = new BufferedReader(new InputStreamReader(udpProcess.getInputStream()));
-                    String udpLine;
-                    while ((udpLine = udpReader.readLine()) != null) {
-                        Log.d("Iperf Client", udpLine);
-                        if(udpLine.contains("Mbits/sec")){
-                            int startIndex = udpLine.indexOf("Bytes");
-                            int endIndex = udpLine.indexOf("Mbits/sec");
-                            String bandwidth = udpLine.substring(startIndex + 7, endIndex);
-                            Log.d("Iperf Client", "Bandwidth: "+ bandwidth);
-                            iperfValues.add(Double.valueOf(bandwidth));
+        String udpCommand;
+
+        if(direction == "Upload"){
+            udpCommand = "/system/bin/iperf3 -c 192.168.1.2 -u -t 10 -b 20M -i 1";
+        }else{
+            udpCommand = "/system/bin/iperf3 -c 192.168.1.2 -u -t 10 -b 100M -i 1 -R";
+        }
+        try {
+            // Executa o cliente UDP e captura a saída
+            Log.d("Running Iperf", "Initialing ...");
+            // Crie um processo para executar o Iperf3
+            Process udpProcess = Runtime.getRuntime().exec(udpCommand);
+            BufferedReader udpReader = new BufferedReader(new InputStreamReader(udpProcess.getInputStream()));
+            String udpLine;
+            while ((udpLine = udpReader.readLine()) != null) {
+                Log.d("Iperf Client", udpLine);
+                if(udpLine.contains("Mbits/sec")){
+                    int startIndex = udpLine.indexOf("Bytes");
+                    int endIndex = udpLine.indexOf("Mbits/sec");
+                    String bandwidth = udpLine.substring(startIndex + 7, endIndex);
+                    Log.d("Iperf Client", "Bandwidth: "+ bandwidth);
+                    iperfValues.add(Double.valueOf(bandwidth));
+                    if (udpLine.contains("receiver")) {
+                        //getting the Bitrate report and the Jitter from the reciever
+                        int endIndexJitter = udpLine.indexOf("ms");
+
+                        String bandwidthReceiver = udpLine.substring(startIndex + 7, endIndex);
+                        String jitterReceiver = udpLine.substring(endIndex + 11, endIndexJitter);
+
+                        if (direction == "Upload"){
+                            uploadUdpValue.setText(bandwidthReceiver + " Mbps");
+                            jitteruploadUdpValue.setText(jitterReceiver + " ms");
+                            Log.d("Iperf Client", "Bandwidth Upload: "+ bandwidthReceiver + " | Jitter Upload = " + jitterReceiver);
+                        } else if (direction == "Download"){
+                            downloadUdpValue.setText(bandwidthReceiver + " Mbps");
+                            jitterdownloadUdpValue.setText(jitterReceiver + " ms");
+                            Log.d("Iperf Client", "Bandwidth Download: "+ bandwidthReceiver + " | Jitter Download = " + bandwidthReceiver);
                         }
                     }
-                    udpReader.close();
-                    udpProcess.waitFor();
-                } catch (IOException | InterruptedException e) {
-                    e.printStackTrace();
                 }
             }
-        });
-        thread.start();
-        try {
-            thread.join(); // Aguarde o término da thread
-        } catch (InterruptedException e) {
-            Log.e("NetworkAnalyzer", "Thread interrupted", e);
+            udpReader.close();
+            udpProcess.waitFor();
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
         }
+
         DecimalFormat formato = new DecimalFormat("#.###");
 
         // Calcula a média dos valores iPerf
@@ -112,7 +125,7 @@ public class IperfApplication {
         String numeroFormatado = formato.format(average);
 
         Log.d("NetworkAnalyzer", "Average Upload result: " + average + " Mbps");
-        uploadUdpValue.setText(numeroFormatado + " Mbps");
+
 }
     public void runIperfServer() {
         String localIpAddress = getLocalIpAddress();
