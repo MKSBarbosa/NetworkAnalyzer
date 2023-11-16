@@ -7,10 +7,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_INTERNET_PERMISSION = 1;
@@ -27,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView sinrValue;
 
     private TextView pingValue;
+    private VideoView videoView1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -47,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
 
         pingValue = findViewById(R.id.pingValue);
 
+        videoView1 = findViewById(R.id.videoView);
+
         // Crie uma instância de IperfApplication
         IperfApplication iperfApp = new IperfApplication(this, uploadUdpValue, jitteruploadUdpValue,
                 downloadUdpValue, jitterdownloadUdpValue);
@@ -54,13 +62,25 @@ public class MainActivity extends AppCompatActivity {
         RadioApplication radioApp = new RadioApplication(rsrpValue, rsrqValue, sinrValue);
         PingApplication pingApp = new PingApplication(this, pingValue);
 
+
+        videoAnalyzer videoApp = new videoAnalyzer(this, videoView1);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Realize qualquer ação que precise ser feita na thread secundária aqui
+                // Por exemplo, você pode chamar um método específico ou iniciar uma operação dentro do videoAnalyzer
+                videoApp.fetchAndDisplayVideo();
+            }
+        });
+        thread.start();
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // Se a permissão ACCESS_FINE_LOCATION não foi concedida, solicite-a ao usuário
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION_PERMISSION);
         } else {
             // Se a permissão foi concedida, chame a função updateRadioInfo
             //radioApp.updateRadioInfo(this);
-            //pingApp.getLatency();
+            pingApp.getLatency();
         }
         // Verifique se a permissão de acesso à rede já foi concedida
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
@@ -72,8 +92,8 @@ public class MainActivity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CODE);
             }
 
-            iperfApp.runIperfClient("Upload");
-            iperfApp.runIperfClient("Download");
+//            iperfApp.runIperfClient("Upload");
+//            iperfApp.runIperfClient("Download");
 
             // Execute o servidor Iperf a partir da instância de IperfApplication
             //iperfApp.runIperfServer();
