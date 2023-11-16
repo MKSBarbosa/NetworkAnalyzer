@@ -26,10 +26,10 @@ public class PingApplication {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String pingCommand = "/system/bin/ping -c 5 8.8.8.8";
+                String pingCommand = "/system/bin/ping -c 5 192.168.70.135";
                 String inputLine;
                 try {
-                    Process process = Runtime.getRuntime().exec(pingCommand);
+                    Process process  = Runtime.getRuntime().exec(pingCommand);
                     BufferedReader bufferedReader = new BufferedReader(
                             new InputStreamReader(process.getInputStream()));
 
