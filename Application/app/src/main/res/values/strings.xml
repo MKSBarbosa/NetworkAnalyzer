@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">NetworkAnalyzer</string>
+
+    <string-array name="array_amostras">
+        <item>10</item>
+        <item>20</item>
+        <item>30</item>
+    </string-array>
+    <string-array name="array_stream">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>
