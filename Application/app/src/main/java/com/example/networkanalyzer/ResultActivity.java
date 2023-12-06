@@ -1,4 +1,4 @@
-package com.example.tela;
+package com.example.networkanalyzer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
