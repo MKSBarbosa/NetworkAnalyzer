@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 
@@ -14,11 +15,19 @@ public class TestActivity3 extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test); //corrigir
+        setContentView(R.layout.activity_test3); //corrigir
 
-        // Restante do seu código...
+        TextView RSRP_data = findViewById(R.id.RSRP_data);
+        TextView RSRQ_data = findViewById(R.id.RSRQ_data);
+        TextView SNR_data = findViewById(R.id.SNR_data);
+        TextView Ping_data = findViewById(R.id.Ping_data);
+        TextView Download_data = findViewById(R.id.Download_data);
+        TextView Upload_data = findViewById(R.id.Upload_data);
+        TextView Jitter_data = findViewById(R.id.Jitter_data);
+        TextView Vazao1_data = findViewById(R.id.Vazao1_data);
+        TextView Loadtime1_data = findViewById(R.id.Loadtime1_data);
 
-        // Adicione este trecho para exibir o AlertDialog quando o botão for clicado
+        // exibir quando o botão for clicado
         Button bt_start = findViewById(R.id.bt_stop);
         bt_start.setOnClickListener(v -> showSaveTestDialog());
     }

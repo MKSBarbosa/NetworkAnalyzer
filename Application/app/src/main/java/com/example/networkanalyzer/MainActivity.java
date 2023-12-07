@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
@@ -18,20 +19,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-         /*
-        ServerIpValue = findViewById(R.id.server_ip);
-        CsvNameValue = findViewById(R.id.csv_name);
-        SampleNumber = findViewById(R.id.amostras);
-        StreamNumber = findViewById(R.id.number_stream);
-        QualitySwitch = findViewById(R.id.quality_switch);*/
+
+        TextView server_ip = findViewById(R.id.server_ip);
+        TextView csv_name = findViewById(R.id.csv_name);
+        Spinner samples_number = findViewById(R.id.samples_number);
+        Spinner stream_number = findViewById(R.id.stream_number);
+        TextView quality_switch = findViewById(R.id.quality_switch);
         Button bt_start = findViewById(R.id.bt_start);
 
 
         // Configurar o primeiro Spinner
-        configureSpinner(R.id.amostras, R.array.array_amostras);
+        configureSpinner(R.id.samples_number, R.array.array_amostras);
 
         // Configurar o segundo Spinner
-        configureSpinner(R.id.number_stream, R.array.array_stream);
+        configureSpinner(R.id.stream_number, R.array.array_stream);
 
         //vai para a tela de teste
         bt_start.setOnClickListener(v -> goToTestWindow());

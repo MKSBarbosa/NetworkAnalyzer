@@ -70,7 +70,7 @@
         app:layout_constraintTop_toBottomOf="@+id/server_ip" />
 
     <Spinner
-        android:id="@+id/amostras"
+        android:id="@+id/samples_number"
         android:layout_width="167dp"
         android:layout_height="32dp"
         android:layout_marginTop="18dp"
@@ -80,14 +80,14 @@
         app:layout_constraintTop_toBottomOf="@+id/csv_name" />
 
     <Spinner
-        android:id="@+id/number_stream"
+        android:id="@+id/stream_number"
         android:layout_width="169dp"
         android:layout_height="30dp"
         android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.932"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/amostras" />
+        app:layout_constraintTop_toBottomOf="@+id/samples_number" />
 
     <TextView
         android:id="@+id/textView"
@@ -98,7 +98,7 @@
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/amostras"
+        app:layout_constraintEnd_toStartOf="@+id/samples_number"
         app:layout_constraintHorizontal_bias="0.177"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/csv_name" />
@@ -112,7 +112,7 @@
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/amostras"
+        app:layout_constraintEnd_toStartOf="@+id/samples_number"
         app:layout_constraintHorizontal_bias="0.177"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -131,7 +131,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
     <Switch
-        android:id="@+id/switch1"
+        android:id="@+id/quality_switch"
         android:layout_width="71dp"
         android:layout_height="37dp"
         android:layout_marginStart="-10dp"
@@ -154,7 +154,7 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.173"
-        app:layout_constraintStart_toEndOf="@+id/switch1"
+        app:layout_constraintStart_toEndOf="@+id/quality_switch"
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
     <Button
@@ -166,7 +166,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/switch1"
+        app:layout_constraintTop_toBottomOf="@+id/quality_switch"
         app:layout_constraintVertical_bias="0.704" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
