@@ -12,20 +12,23 @@ import android.app.AlertDialog;
 
 public class TestActivity3 extends AppCompatActivity {
 
+    TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data;
+    TextView Vazao1_data, Loadtime1_data;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test3); //corrigir
 
-        TextView RSRP_data = findViewById(R.id.RSRP_data);
-        TextView RSRQ_data = findViewById(R.id.RSRQ_data);
-        TextView SNR_data = findViewById(R.id.SNR_data);
-        TextView Ping_data = findViewById(R.id.Ping_data);
-        TextView Download_data = findViewById(R.id.Download_data);
-        TextView Upload_data = findViewById(R.id.Upload_data);
-        TextView Jitter_data = findViewById(R.id.Jitter_data);
-        TextView Vazao1_data = findViewById(R.id.Vazao1_data);
-        TextView Loadtime1_data = findViewById(R.id.Loadtime1_data);
+        RSRP_data = findViewById(R.id.RSRP_data);
+        RSRQ_data = findViewById(R.id.RSRQ_data);
+        SNR_data = findViewById(R.id.SNR_data);
+        Ping_data = findViewById(R.id.Ping_data);
+        Download_data = findViewById(R.id.Download_data);
+        Upload_data = findViewById(R.id.Upload_data);
+        Jitter_data = findViewById(R.id.Jitter_data);
+        Vazao1_data = findViewById(R.id.Vazao1_data);
+        Loadtime1_data = findViewById(R.id.Loadtime1_data);
 
         // exibir quando o botão for clicado
         Button bt_start = findViewById(R.id.bt_stop);

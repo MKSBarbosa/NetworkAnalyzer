@@ -515,6 +515,22 @@
             app:layout_constraintTop_toBottomOf="@+id/Jitter_name"
             app:layout_constraintVertical_bias="0.0" />
 
+
+        <TextView
+            android:id="@+id/Jitter_data2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="12dp"
+            android:text="teste"
+            android:textColor="#ECE2E2"
+            app:layout_constraintBottom_toBottomOf="@+id/background_rede"
+            app:layout_constraintEnd_toEndOf="@+id/background_rede"
+            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintStart_toEndOf="@+id/Upload_data"
+            app:layout_constraintTop_toBottomOf="@+id/Jitter_name"
+            app:layout_constraintVertical_bias="0.574" />
+
         <TextView
             android:id="@+id/Vazao1_data"
             android:layout_width="wrap_content"
