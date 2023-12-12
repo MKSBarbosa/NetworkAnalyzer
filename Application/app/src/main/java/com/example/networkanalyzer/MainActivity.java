@@ -1,9 +1,14 @@
 package com.example.networkanalyzer;
 
+import android.Manifest;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,12 +19,19 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = "MainActivity";
+    private static final int REQUEST_INTERNET_PERMISSION = 1;
+    private static final int REQUEST_LOCATION_PERMISSION = 2;
+    private static final int REQUEST_PHONE_CALL_PERMISSION = 3;
+    private static final int REQUEST_STORAGE_PERMISSION = 4;
+    private static final int REQUEST_SYSTEM_BIN_PERMISSION = 5;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        checkAndRequestPermissions();
+
         setContentView(R.layout.activity_main);
-
-
         TextView server_ip = findViewById(R.id.server_ip);
         TextView csv_name = findViewById(R.id.csv_name);
         Spinner samples_number = findViewById(R.id.samples_number);
@@ -36,6 +48,23 @@ public class MainActivity extends AppCompatActivity {
 
         //vai para a tela de teste
         bt_start.setOnClickListener(v -> goToTestWindow());
+    }
+
+
+    private void checkAndRequestPermissions() {
+        checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION_PERMISSION);
+        checkAndRequestPermission(Manifest.permission.CALL_PHONE, REQUEST_PHONE_CALL_PERMISSION);
+        checkAndRequestPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, REQUEST_STORAGE_PERMISSION);
+        checkAndRequestPermission(Manifest.permission.INTERNET, REQUEST_INTERNET_PERMISSION);
+    }
+
+    private void checkAndRequestPermission(String permission, int requestCode) {
+        if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+            Log.d(TAG, "Permission not granted: " + permission);
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        } else {
+            Log.d(TAG, "Permission already granted: " + permission);
+        }
     }
 
     private void configureSpinner(int spinnerId, int arrayResourceId) {
