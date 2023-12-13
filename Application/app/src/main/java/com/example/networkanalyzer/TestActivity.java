@@ -66,16 +66,30 @@ public class TestActivity extends AppCompatActivity {
         radioApp.updateRadioInfo(this);
 
 
-        VideoApllication videoApp = new VideoApllication(this, videoView1);
-        Thread thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                // Realize qualquer ação que precise ser feita na thread secundária aqui
-                // Por exemplo, você pode chamar um método específico ou iniciar uma operação dentro do videoAnalyzer
-                videoApp.fetchAndDisplayVideo();
-            }
-        });
-        thread.start();
+        VideoApllication[] videoApp = new VideoApllication[3];
+
+        videoApp[0] = new VideoApllication(this, videoView1);
+        videoApp[1] = new VideoApllication(this, videoView2);
+        videoApp[2] = new VideoApllication(this, videoView3);
+        int numThreads = 3;
+
+        Thread[] threads = new Thread[numThreads];
+        for(int i =0; i< numThreads; i++){
+            final int index = i; // Criando uma cópia final de i
+
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // Realize qualquer ação que precise ser feita na thread secundária aqui
+                    // Utilize a cópia final de i (index) para acessar o elemento correto do array videoApp
+                    videoApp[index].fetchAndDisplayVideo();
+                }
+            });
+            threads[i].start();
+        }
+
+
+
 //        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
 //                Download_data, Jitter_data2);
 //        iperfApp.runIperfClient("Upload");
