@@ -70,54 +70,6 @@
             app:layout_constraintTop_toBottomOf="@+id/background_rede"
             app:layout_constraintVertical_bias="0.0" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/Stream_1"
-            android:layout_width="157dp"
-            android:layout_height="105dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="40dp"
-            android:background="#CDD1E6"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title_stream"
-            app:layout_constraintVertical_bias="0.005" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/stream_2"
-            android:layout_width="157dp"
-            android:layout_height="105dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="24dp"
-            android:background="#CDD1E6"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/Stream_1"
-            app:layout_constraintVertical_bias="0.002" />
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/stream_3"
-            android:layout_width="157dp"
-            android:layout_height="105dp"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="24dp"
-            android:background="#CDD1E6"
-            android:minHeight="?attr/actionBarSize"
-            android:theme="?attr/actionBarTheme"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/stream_2"
-            app:layout_constraintVertical_bias="0.0" />
-
         <Button
             android:id="@+id/bt_stop"
             android:layout_width="wrap_content"
@@ -137,34 +89,31 @@
             android:id="@+id/Vazao2_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="60dp"
             android:layout_marginBottom="8dp"
             android:text="Vazão"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/stream_2"
-            app:layout_constraintTop_toBottomOf="@+id/Stream_1" />
+            app:layout_constraintTop_toBottomOf="@+id/videoView1" />
 
         <TextView
             android:id="@+id/Loadtime2_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
             android:layout_marginTop="38dp"
             android:layout_marginBottom="8dp"
             android:text="Load Time"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/stream_2"
+            app:layout_constraintHorizontal_bias="0.394"
+            app:layout_constraintStart_toEndOf="@+id/videoView2"
             app:layout_constraintTop_toBottomOf="@+id/Vazao2_name" />
 
         <TextView
@@ -176,7 +125,7 @@
             android:layout_marginEnd="24dp"
             android:layout_marginBottom="8dp"
             android:text="Jitter"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -193,7 +142,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="RSRQ"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -211,7 +160,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Info de Rádio"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -228,13 +177,13 @@
             android:layout_marginTop="38dp"
             android:layout_marginBottom="8dp"
             android:text="Load Time"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
             app:layout_constraintTop_toBottomOf="@+id/Vazao1_name" />
 
         <TextView
@@ -246,7 +195,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Upload"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -264,7 +213,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Stream"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -282,7 +231,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Info de Rede"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -300,7 +249,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Ping"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -317,47 +266,47 @@
             android:layout_marginTop="36dp"
             android:layout_marginBottom="8dp"
             android:text="Vazão"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
             app:layout_constraintTop_toBottomOf="@+id/title_stream" />
 
         <TextView
             android:id="@+id/Loadtime3_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="38dp"
+            android:layout_marginTop="36dp"
+            android:layout_marginEnd="52dp"
             android:layout_marginBottom="8dp"
             android:text="Load Time"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/stream_3"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/videoView3"
             app:layout_constraintTop_toBottomOf="@+id/Vazao3_name" />
 
         <TextView
             android:id="@+id/loadtime3_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:layout_marginBottom="8dp"
             android:text="Média Vazão       Média Load Time"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.505"
+            app:layout_constraintHorizontal_bias="0.444"
             app:layout_constraintStart_toStartOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/stream_3" />
+            app:layout_constraintTop_toBottomOf="@+id/videoView3" />
 
         <TextView
             android:id="@+id/RSRP_name"
@@ -368,7 +317,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="RSRP"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -385,7 +334,7 @@
             android:layout_marginEnd="30dp"
             android:layout_marginBottom="8dp"
             android:text="SNR"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
@@ -398,18 +347,16 @@
             android:id="@+id/Vazao3_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="60dp"
             android:layout_marginBottom="8dp"
             android:text="Vazão"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
-            app:layout_constraintTop_toBottomOf="@+id/stream_2" />
+            app:layout_constraintTop_toBottomOf="@+id/videoView2" />
 
         <TextView
             android:id="@+id/Download_name"
@@ -418,7 +365,7 @@
             android:layout_marginStart="27dp"
             android:layout_marginTop="32dp"
             android:text="Download"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
@@ -433,7 +380,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Network Analyzer"
-            android:textColor="#CD2D2D"
+            android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/background_title"
@@ -515,7 +462,6 @@
             app:layout_constraintTop_toBottomOf="@+id/Jitter_name"
             app:layout_constraintVertical_bias="0.0" />
 
-
         <TextView
             android:id="@+id/Jitter_data2"
             android:layout_width="wrap_content"
@@ -526,10 +472,10 @@
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
             app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.506"
+            app:layout_constraintHorizontal_bias="0.465"
             app:layout_constraintStart_toEndOf="@+id/Upload_data"
             app:layout_constraintTop_toBottomOf="@+id/Jitter_name"
-            app:layout_constraintVertical_bias="0.574" />
+            app:layout_constraintVertical_bias="0.74" />
 
         <TextView
             android:id="@+id/Vazao1_data"
@@ -541,7 +487,7 @@
             app:layout_constraintBottom_toTopOf="@+id/Loadtime1_name"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.436"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
             app:layout_constraintTop_toBottomOf="@+id/Vazao1_name"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -556,7 +502,7 @@
             app:layout_constraintBottom_toTopOf="@+id/Vazao2_name"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
             app:layout_constraintTop_toBottomOf="@+id/Loadtime1_name"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -564,29 +510,29 @@
             android:id="@+id/Vazao2_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="68dp"
             android:text="teste"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toTopOf="@+id/Loadtime2_name"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/videoView2"
             app:layout_constraintTop_toBottomOf="@+id/Vazao2_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.272" />
 
         <TextView
             android:id="@+id/Loadtime2_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="64dp"
             android:text="teste"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toTopOf="@+id/Vazao3_name"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintHorizontal_bias="0.946"
+            app:layout_constraintStart_toEndOf="@+id/videoView2"
             app:layout_constraintTop_toBottomOf="@+id/Loadtime2_name"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -594,14 +540,13 @@
             android:id="@+id/Vazao3_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:text="teste"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toTopOf="@+id/Loadtime3_name"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintHorizontal_bias="0.432"
+            app:layout_constraintStart_toEndOf="@+id/videoView3"
             app:layout_constraintTop_toBottomOf="@+id/Vazao3_name"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -609,14 +554,13 @@
             android:id="@+id/Loadtime3_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
             android:layout_marginTop="8dp"
             android:text="teste"
             android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/loadtime3_name"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/Stream_1"
+            app:layout_constraintHorizontal_bias="0.423"
+            app:layout_constraintStart_toEndOf="@+id/videoView3"
             app:layout_constraintTop_toBottomOf="@+id/Loadtime3_name"
             app:layout_constraintVertical_bias="0.0" />
 
@@ -676,6 +620,42 @@
             app:layout_constraintHorizontal_bias="0.887"
             app:layout_constraintStart_toStartOf="@+id/background_radio"
             app:layout_constraintTop_toBottomOf="@+id/SNR_name"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <VideoView
+            android:id="@+id/videoView1"
+            android:layout_width="157sp"
+            android:layout_height="105sp"
+            android:layout_marginTop="36dp"
+            app:layout_constraintBottom_toTopOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintHorizontal_bias="0.136"
+            app:layout_constraintStart_toStartOf="@+id/background_stream"
+            app:layout_constraintTop_toBottomOf="@+id/title_stream"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <VideoView
+            android:id="@+id/videoView2"
+            android:layout_width="157sp"
+            android:layout_height="105sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintHorizontal_bias="0.136"
+            app:layout_constraintStart_toStartOf="@+id/background_stream"
+            app:layout_constraintTop_toBottomOf="@+id/videoView1"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <VideoView
+            android:id="@+id/videoView3"
+            android:layout_width="157sp"
+            android:layout_height="105sp"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintHorizontal_bias="0.147"
+            app:layout_constraintStart_toStartOf="@+id/background_stream"
+            app:layout_constraintTop_toBottomOf="@+id/videoView2"
             app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
