@@ -31,7 +31,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:text="Network Analyzer"
-        android:textColor="#CD2D2D"
+        android:textColor="#ECE2E2"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/toolbar"
