@@ -2,6 +2,7 @@ package com.example.networkanalyzer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -17,7 +18,10 @@ public class TestActivity extends AppCompatActivity {
     TextView Avarage_Output, Avarage_Loadtime;
     VideoView videoView1, videoView2, videoView3;
     Button bt_start;
-
+    private Context context;
+    private TextView downloadValueTextView;
+    private TextView tempoDeCarregamentoValueTextView;
+    private String videoUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +65,17 @@ public class TestActivity extends AppCompatActivity {
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         radioApp.updateRadioInfo(this);
 
+
+        VideoApllication videoApp = new VideoApllication(this, videoView1);
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // Realize qualquer ação que precise ser feita na thread secundária aqui
+                // Por exemplo, você pode chamar um método específico ou iniciar uma operação dentro do videoAnalyzer
+                videoApp.fetchAndDisplayVideo();
+            }
+        });
+        thread.start();
 //        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
 //                Download_data, Jitter_data2);
 //        iperfApp.runIperfClient("Upload");
