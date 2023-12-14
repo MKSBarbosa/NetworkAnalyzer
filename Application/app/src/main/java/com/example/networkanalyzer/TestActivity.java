@@ -8,12 +8,14 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
+import android.widget.VideoView;
 
 public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data, Jitter_data2;
     TextView Vazao1_data, Loadtime1_data, Vazao2_data, Loadtime2_data, Vazao3_data, Loadtime3_data;
     TextView Avarage_Output, Avarage_Loadtime;
+    VideoView videoView1, videoView2, videoView3;
     Button bt_start;
 
 
@@ -39,7 +41,11 @@ public class TestActivity extends AppCompatActivity {
         Loadtime3_data = findViewById(R.id.Loadtime3_data);
         Avarage_Output = findViewById(R.id.Avarage_Output);
         Avarage_Loadtime = findViewById(R.id.Avarage_Loadtime);
+        videoView1 = findViewById(R.id.videoView1);
+        videoView2 = findViewById(R.id.videoView2);
+        videoView3 = findViewById(R.id.videoView3);
         bt_start = findViewById(R.id.bt_stop);
+
         // exibir o AlertDialog quando o botão for clicadp
         bt_start.setOnClickListener(v -> showSaveTestDialog());
 
