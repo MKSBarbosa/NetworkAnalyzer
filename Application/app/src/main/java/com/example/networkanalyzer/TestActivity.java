@@ -5,11 +5,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.VideoView;
+
+import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -18,10 +25,7 @@ public class TestActivity extends AppCompatActivity {
     TextView Avarage_Output, Avarage_Loadtime;
     VideoView videoView1, videoView2, videoView3;
     Button bt_start;
-    private Context context;
-    private TextView downloadValueTextView;
-    private TextView tempoDeCarregamentoValueTextView;
-    private String videoUrl;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,12 +72,29 @@ public class TestActivity extends AppCompatActivity {
 
         VideoApllication[] videoApp = new VideoApllication[3];
 
-        videoApp[0] = new VideoApllication(this, videoView1);
-        videoApp[1] = new VideoApllication(this, videoView2);
-        videoApp[2] = new VideoApllication(this, videoView3);
-        int numThreads = 3;
 
+        int numThreads = 3;
+        VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[3];
         Thread[] threads = new Thread[numThreads];
+        double averageThroughput=0;
+        Handler handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    Bundle bundle = msg.getData();
+                    VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
+                    // Faça o que for necessário com a receivedTuple
+                    //averageThroughput +=
+                    //Avarage_Output.setText(String.format(Locale.US, "%.2f Mbps", bandwidth));
+
+                    Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
+                }
+            }
+        };
+        videoApp[0] = new VideoApllication(this, videoView1,Vazao1_data, Loadtime1_data,handler);
+        videoApp[1] = new VideoApllication(this, videoView2,Vazao2_data, Loadtime2_data, handler);
+        videoApp[2] = new VideoApllication(this, videoView3,Vazao3_data, Loadtime3_data, handler);
+
         for(int i =0; i< numThreads; i++){
             final int index = i; // Criando uma cópia final de i
 
@@ -83,6 +104,7 @@ public class TestActivity extends AppCompatActivity {
                     // Realize qualquer ação que precise ser feita na thread secundária aqui
                     // Utilize a cópia final de i (index) para acessar o elemento correto do array videoApp
                     videoApp[index].fetchAndDisplayVideo();
+
                 }
             });
             threads[i].start();
@@ -90,9 +112,6 @@ public class TestActivity extends AppCompatActivity {
 
 
 
-//        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
-//                Download_data, Jitter_data2);
-//        iperfApp.runIperfClient("Upload");
     }
 
 
