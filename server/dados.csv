@@ -1,4 +1,9 @@
-rsrp,rsrq,snr,dowload,upload,jitter,ping,vazao,tempoDeCarregamento
-1,,,,,,,,
-1,,,,20,,,,
-valor_rsrp,valor_rsrq,valor_snr,valor_dowload,valor_upload,valor_jitter,valor_ping,valor_vazao,valor_tempoDeCarregamento
+id,rsrp,rsrq,snr,download,upload,jitterD,jitterU,ping,vazao,tempoDeCarregamento
+Marcelo,0,0,0,0,0,0,0,50,116.6079293045059,1.764
+Marcelo,0,0,0,0,0,0,0,59,23.566032135209927,8.778333333333334
+Marcelo,0,0,0,0,0,0,0,10,23.880045685498562,8.623000000000001
+Marcelo,0,0,0,0,0,0,0,10,18.600593855806782,11.081666666666665
+Marcelo,0,0,0,0,0,0,0,140,25.166042369820648,8.448666666666666
+Marcelo,0,0,0,0,0,0,0,159,19.929972925873958,10.442666666666666
+Marcelo,0,0,0,0,0,0,0,64,21.80280318112175,9.551
+Marcelo,0,0,0,0,0,0,0,44,191.11439613807906,1.0763333333333334
