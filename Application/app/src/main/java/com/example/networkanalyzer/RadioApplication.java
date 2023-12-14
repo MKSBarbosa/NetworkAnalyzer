@@ -33,6 +33,9 @@ public class RadioApplication {
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
+            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
             List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();
             if (cellInfos != null && !cellInfos.isEmpty()) {
                 for (CellInfo cellInfo : cellInfos) {
