@@ -2,19 +2,27 @@ package com.example.networkanalyzer;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.VideoView;
 
+import java.util.Locale;
+import java.util.concurrent.CountDownLatch;
+
 public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data, Jitter_data2;
     TextView Vazao1_data, Loadtime1_data, Vazao2_data, Loadtime2_data, Vazao3_data, Loadtime3_data;
-    TextView Avarage_Output, Avarage_Loadtime;
+    TextView Average_Output, Average_Loadtime;
     VideoView videoView1, videoView2, videoView3;
     Button bt_start;
 
@@ -39,8 +47,8 @@ public class TestActivity extends AppCompatActivity {
         Loadtime2_data = findViewById(R.id.Loadtime2_data);
         Vazao3_data = findViewById(R.id.Vazao3_data);
         Loadtime3_data = findViewById(R.id.Loadtime3_data);
-        Avarage_Output = findViewById(R.id.Avarage_Output);
-        Avarage_Loadtime = findViewById(R.id.Avarage_Loadtime);
+        Average_Output = findViewById(R.id.Avarage_Output);
+        Average_Loadtime = findViewById(R.id.Avarage_Loadtime);
         videoView1 = findViewById(R.id.videoView1);
         videoView2 = findViewById(R.id.videoView2);
         videoView3 = findViewById(R.id.videoView3);
@@ -61,9 +69,54 @@ public class TestActivity extends AppCompatActivity {
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         radioApp.updateRadioInfo(this);
 
-//        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
-//                Download_data, Jitter_data2);
-//        iperfApp.runIperfClient("Upload");
+
+        VideoApllication[] videoApp = new VideoApllication[3];
+
+
+        int numThreads = 3;
+        VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[3];
+        Thread[] threads = new Thread[numThreads];
+        final double[] averageThroughput = {0};
+        final double[] averageLoadTime = {0};
+
+        Handler handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(Message msg) {
+                if (msg.what == 1) {
+                    Bundle bundle = msg.getData();
+                    VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
+                    // Faça o que for necessário com a receivedTuple
+                    averageThroughput[0] +=receivedTuple.getDownloadValue();
+                    averageLoadTime[0] +=receivedTuple.getLoadTimeValue();
+                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]/3));
+                    Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0] / 3));
+
+
+                    Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
+                }
+            }
+        };
+        videoApp[0] = new VideoApllication(this, videoView1,Vazao1_data, Loadtime1_data,handler);
+        videoApp[1] = new VideoApllication(this, videoView2,Vazao2_data, Loadtime2_data, handler);
+        videoApp[2] = new VideoApllication(this, videoView3,Vazao3_data, Loadtime3_data, handler);
+
+        for(int i =0; i< numThreads; i++){
+            final int index = i; // Criando uma cópia final de i
+
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    // Realize qualquer ação que precise ser feita na thread secundária aqui
+                    // Utilize a cópia final de i (index) para acessar o elemento correto do array videoApp
+                    videoApp[index].fetchAndDisplayVideo();
+
+                }
+            });
+            threads[i].start();
+        }
+
+
+
     }
 
 

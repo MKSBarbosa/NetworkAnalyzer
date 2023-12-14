@@ -32,7 +32,7 @@ def success():
 
 @app.route('/video', methods=['GET'])
 def send_video():
-    return send_from_directory(directory="../Videos", path="teste.mp4", as_attachment=False)
+    return send_from_directory(directory="../../Videos", path="teste.mp4", as_attachment=False)
 
 @app.route('/registrar_dados', methods=['POST'])
 def registrar_dados():
@@ -51,4 +51,4 @@ def registrar_dados():
         return jsonify({'status': 'erro', 'mensagem': str(e)})
     
 if __name__ == '__main__':
-    app.run(host='10.0.0.200', port=3001)
+    app.run(host='172.27.9.239', port=3001)
