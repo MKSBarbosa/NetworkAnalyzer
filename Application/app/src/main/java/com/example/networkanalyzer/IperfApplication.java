@@ -87,9 +87,9 @@ public class IperfApplication {
         String udpCommand;
 
         if(direction == "Upload"){
-            udpCommand = "/system/bin/iperf3 -c 192.168.153.96 -u -t 10 -b 20M -i 1";
+            udpCommand = "/system/bin/iperf3 -c 172.27.9.53 -u -t 10 -b 20M -i 1";
         }else{
-            udpCommand = "/system/bin/iperf3 -c 192.168.153.96 -u -t 10 -b 100M -i 1 -R";
+            udpCommand = "/system/bin/iperf3 -c 172.27.9.53 -u -t 10 -b 100M -i 1 -R";
         }
         try {
             // Executa o cliente UDP e captura a saída
