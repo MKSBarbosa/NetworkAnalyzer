@@ -71,6 +71,13 @@ public class TestActivity extends AppCompatActivity {
         String stream_number_Value = StorageClass.stream_number_Value;
         String quality_switch_Value = StorageClass.quality_switch_Value;
 
+
+        Log.d("Storage Class", "server_ip_Value: " + server_ip_Value);
+        Log.d("Storage Class", "csv_name_Value: " + csv_name_Value);
+        Log.d("Storage Class", "samples_number_Value: " + samples_number_Value);
+        Log.d("Storage Class", "stream_number_Value: " + stream_number_Value);
+        Log.d("Storage Class", "quality_switch_Value: " + quality_switch_Value);
+
         // exibir o AlertDialog quando o botão for clicadp
         bt_start.setOnClickListener(v -> showSaveTestDialog());
 
