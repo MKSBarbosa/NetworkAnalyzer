@@ -15,7 +15,18 @@ import android.widget.Toast;
 import android.app.AlertDialog;
 import android.widget.VideoView;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 
 public class TestActivity extends AppCompatActivity {
@@ -59,20 +70,101 @@ public class TestActivity extends AppCompatActivity {
 
         initializeApplications();
     }
+    private void sendCSV(Map<String, Object> dados) {
+        Thread threadSend = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    // URL do servidor Python
+                    String serverURL = "http://172.27.9.239:3001/registrar_dados";
+
+                    // Criar objeto URL com a URL do servidor
+                    URL url = new URL(serverURL);
+
+                    // Abrir conexão HTTP
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    conn.setRequestMethod("POST");
+                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                    conn.setRequestProperty("Accept", "application/json");
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+
+                    // Converter os dados para JSON
+                    JSONObject jsonParam = new JSONObject(dados);
+
+                    // Enviar os dados para o servidor
+                    OutputStream os = conn.getOutputStream();
+                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                    writer.write(jsonParam.toString());
+                    writer.flush();
+                    writer.close();
+                    os.close();
+
+                    // Verificar a resposta do servidor
+                    int responseCode = conn.getResponseCode();
+                    if (responseCode == HttpURLConnection.HTTP_OK) {
+                        // Se o envio foi bem-sucedido
+                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                        StringBuffer response = new StringBuffer();
+                        String line;
+                        while ((line = in.readLine()) != null) {
+                            response.append(line);
+                        }
+                        in.close();
+                        Log.d("ServerResponse", response.toString());
+                    } else {
+                        // Se houve um erro no envio
+                        Log.e("ServerResponse", "Erro ao enviar os dados para o servidor. Código de resposta: " + responseCode);
+                    }
+
+                    conn.disconnect();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        // Iniciar a thread para enviar os dados
+        threadSend.start();
+    }
 
     private void initializeApplications() {
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("id", "Marcelo");
+        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", 'ping', 'vazao', 'tempoDeCarregamento']
+
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
         int latency = pingApp.getLatency();
+        dados.put("ping",latency);
+        //dados.put("ping",10);
+        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
+
 
         // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
+        dados.put("rsrp",radioInfo.getRsrp());
+        dados.put("rsrq",radioInfo.getRsrq());
+        dados.put("snr",radioInfo.getSnr());
+        //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
-                Download_data, Jitter_data2);
+        /*IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2);
         IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
-        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+        dados.put("upload",iperfUpload.getBitRate());
+        dados.put("jitterU",iperfUpload.getJitter());*/
+        dados.put("upload",0);
+        dados.put("jitterU",0);
+        //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
+
+        /*IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+        dados.put("download",iperfDownload.getBitRate());
+        dados.put("jitterD",iperfDownload.getJitter());*/
+        dados.put("download",0);
+        dados.put("jitterD",0);
+        //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
+
+
 
         VideoApllication[] videoApp = new VideoApllication[3];
         int numThreads = 3;
@@ -80,6 +172,8 @@ public class TestActivity extends AppCompatActivity {
         Thread[] threads = new Thread[numThreads];
         final double[] averageThroughput = {0};
         final double[] averageLoadTime = {0};
+        final int[] numberMedia = {0};
+
 
         Handler handler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -90,8 +184,15 @@ public class TestActivity extends AppCompatActivity {
                     // Faça o que for necessário com a receivedTuple
                     averageThroughput[0] +=receivedTuple.getDownloadValue();
                     averageLoadTime[0] +=receivedTuple.getLoadTimeValue();
+                    numberMedia[0]++;
                     Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]/3));
                     Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0] / 3));
+                    if(numberMedia[0]==3){
+                        dados.put("vazao",averageThroughput[0]/3);
+                        dados.put("tempoDeCarregamento",averageLoadTime[0]/3);
+                        sendCSV(dados);
+
+                    }
 
 
                     Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));

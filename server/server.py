@@ -16,7 +16,7 @@ def salvar_dados_csv(dados):
 
     # Abrir o arquivo CSV em modo de anexação
     with open(nome_arquivo_csv, 'a', newline='') as csvfile:
-        fieldnames = ['rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitter', 'ping', 'vazao', 'tempoDeCarregamento']
+        fieldnames = ['id','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", 'ping', 'vazao', 'tempoDeCarregamento']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         # Se o arquivo não existir, escrever o cabeçalho
