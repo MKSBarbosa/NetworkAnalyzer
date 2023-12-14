@@ -22,7 +22,7 @@ public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data, Jitter_data2;
     TextView Vazao1_data, Loadtime1_data, Vazao2_data, Loadtime2_data, Vazao3_data, Loadtime3_data;
-    TextView Avarage_Output, Avarage_Loadtime;
+    TextView Average_Output, Average_Loadtime;
     VideoView videoView1, videoView2, videoView3;
     Button bt_start;
 
@@ -47,8 +47,8 @@ public class TestActivity extends AppCompatActivity {
         Loadtime2_data = findViewById(R.id.Loadtime2_data);
         Vazao3_data = findViewById(R.id.Vazao3_data);
         Loadtime3_data = findViewById(R.id.Loadtime3_data);
-        Avarage_Output = findViewById(R.id.Avarage_Output);
-        Avarage_Loadtime = findViewById(R.id.Avarage_Loadtime);
+        Average_Output = findViewById(R.id.Avarage_Output);
+        Average_Loadtime = findViewById(R.id.Avarage_Loadtime);
         videoView1 = findViewById(R.id.videoView1);
         videoView2 = findViewById(R.id.videoView2);
         videoView3 = findViewById(R.id.videoView3);
@@ -76,7 +76,9 @@ public class TestActivity extends AppCompatActivity {
         int numThreads = 3;
         VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[3];
         Thread[] threads = new Thread[numThreads];
-        double averageThroughput=0;
+        final double[] averageThroughput = {0};
+        final double[] averageLoadTime = {0};
+
         Handler handler = new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(Message msg) {
@@ -84,8 +86,11 @@ public class TestActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
                     // Faça o que for necessário com a receivedTuple
-                    //averageThroughput +=
-                    //Avarage_Output.setText(String.format(Locale.US, "%.2f Mbps", bandwidth));
+                    averageThroughput[0] +=receivedTuple.getDownloadValue();
+                    averageLoadTime[0] +=receivedTuple.getLoadTimeValue();
+                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]/3));
+                    Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0] / 3));
+
 
                     Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
                 }
