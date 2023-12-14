@@ -1,5 +1,14 @@
 <resources>
     <string name="app_name">NetworkAnalyzer</string>
+    <string name="network_analyzer">Network Analyzer</string>
+    <string name="start">Start</string>
+    <string name="csv_name">CSV Name</string>
+    <string name="hd">HD</string>
+    <string name="server_ip">Server Ip</string>
+    <string name="number_of_samples">number of samples:</string>
+    <string name="number_of_streams">number of streams:</string>
+    <string name="quality">Quality</string>
+    <string name="_4k">4k</string>
 
     <string-array name="array_amostras">
         <item>10</item>

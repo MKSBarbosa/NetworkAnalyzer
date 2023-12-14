@@ -30,7 +30,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Network Analyzer"
+        android:text="@string/network_analyzer"
         android:textColor="#ECE2E2"
         android:textSize="20sp"
         android:textStyle="bold"
@@ -43,27 +43,33 @@
     <EditText
         android:id="@+id/server_ip"
         android:layout_width="390dp"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
+        android:layout_height="48dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="Server Ip"
+        android:hint="@string/server_ip"
         android:inputType="number|numberDecimal"
+        android:textColorHint="#757575"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/Title" />
+        app:layout_constraintTop_toBottomOf="@+id/Title"
+        app:layout_constraintVertical_bias="0.0"
+        android:autofillHints="" />
 
     <EditText
         android:id="@+id/csv_name"
         android:layout_width="390dp"
-        android:layout_height="45dp"
+        android:layout_height="48dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="8dp"
+        android:autofillHints=""
         android:ems="10"
-        android:hint="CSV Name"
+        android:hint="@string/csv_name"
         android:inputType="text"
+        android:textColorHint="#757575"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.6"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,17 +78,19 @@
     <Spinner
         android:id="@+id/samples_number"
         android:layout_width="167dp"
-        android:layout_height="32dp"
+        android:layout_height="48dp"
         android:layout_marginTop="18dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.931"
+        app:layout_constraintHorizontal_bias="0.934"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/csv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/csv_name"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Spinner
         android:id="@+id/stream_number"
         android:layout_width="169dp"
-        android:layout_height="30dp"
+        android:layout_height="48dp"
         android:layout_marginTop="18dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.932"
@@ -93,75 +101,80 @@
         android:id="@+id/textView"
         android:layout_width="156dp"
         android:layout_height="30dp"
-        android:layout_marginTop="18dp"
-        android:text="number of samples:"
+        android:layout_marginTop="24dp"
+        android:text="@string/number_of_samples"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/samples_number"
-        app:layout_constraintHorizontal_bias="0.177"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/csv_name" />
+        app:layout_constraintTop_toBottomOf="@+id/csv_name"
+        tools:ignore="TextSizeCheck" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="156dp"
         android:layout_height="30dp"
-        android:layout_marginTop="18dp"
-        android:text="number of streams:"
+        android:layout_marginTop="40dp"
+        android:text="@string/number_of_streams"
         android:textAlignment="center"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/samples_number"
-        app:layout_constraintHorizontal_bias="0.177"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        tools:ignore="TextSizeCheck" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="54dp"
         android:layout_height="23dp"
         android:layout_marginTop="20dp"
-        android:text="Quality"
+        android:text="@string/quality"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView2" />
+        app:layout_constraintTop_toBottomOf="@+id/textView2"
+        tools:ignore="TextSizeCheck" />
 
     <Switch
         android:id="@+id/quality_switch"
         android:layout_width="71dp"
-        android:layout_height="37dp"
+        android:layout_height="48dp"
         android:layout_marginStart="-10dp"
-        android:text="HD"
+        android:text="@string/hd"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="UseSwitchCompatOrMaterialXml" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="30dp"
         android:layout_height="25dp"
         android:layout_marginStart="-28dp"
-        android:layout_marginTop="6dp"
-        android:text="4k"
+        android:layout_marginTop="12dp"
+        android:text="@string/_4k"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.173"
+        app:layout_constraintHorizontal_bias="0.161"
         app:layout_constraintStart_toEndOf="@+id/quality_switch"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintTop_toBottomOf="@+id/textView3"
+        tools:ignore="TextSizeCheck" />
 
     <Button
         android:id="@+id/bt_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Start"
+        android:text="@string/start"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"

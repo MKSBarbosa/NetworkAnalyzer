@@ -13,6 +13,7 @@ import android.telephony.TelephonyManager;
 
 import androidx.core.app.ActivityCompat;
 
+import java.io.Serializable;
 import java.util.List;
 
 public class RadioApplication {
@@ -21,6 +22,23 @@ public class RadioApplication {
     TextView rsrqTextView;
     TextView snrTextView;
 
+
+    public class nTuple implements Serializable {
+        public final int value1;
+        public final int value2;
+        public final int value3;
+
+        public nTuple(int value1, int value2, int value3) {
+            this.value1 = value1;
+            this.value2 = value2;
+            this.value3 = value3;
+        }
+
+        public int getRsrp() {return value1;}
+        public int getRsrq() {return value2;}
+        public int getSnr() {return value3;}
+    }
+
     public RadioApplication(TextView p, TextView q, TextView s) {
         Log.d("Radio Application", "Creating object ...");
         this.rsrpTextView = p;
@@ -28,11 +46,14 @@ public class RadioApplication {
         this.snrTextView = s;
     }
 
-    public void updateRadioInfo(Context context) {
+    public nTuple updateRadioInfo(Context context) {
         Log.d("Radio Application", "updateRadioInfo() called");
 
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
+            if (ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return new nTuple(0, 0, 0);
+            }
             List<CellInfo> cellInfos = telephonyManager.getAllCellInfo();
             if (cellInfos != null && !cellInfos.isEmpty()) {
                 for (CellInfo cellInfo : cellInfos) {
@@ -46,9 +67,9 @@ public class RadioApplication {
                             rsrpTextView.setText(String.valueOf(rsrp) + " dBm");
                             rsrqTextView.setText(String.valueOf(rsrq) + " dB");
                             snrTextView.setText(String.valueOf(snr) + " dB");
-
+                            nTuple radioInfo = new nTuple(rsrp, rsrq, sinr);
                             Log.d("Signal Strength", "Net Type 5G | RSRP: " + String.valueOf(rsrp) + " dBm | RSRQ: " + String.valueOf(rsrq) + " dB | SNR: " + String.valueOf(snr) + " dB");
-                            break;
+                            return  radioInfo;
                         }
                     } else {
                         Log.d("NetworkAnalyzer", "API level not sufficient for 5G signal strength retrieval");
@@ -58,6 +79,7 @@ public class RadioApplication {
                 Log.d("NetworkAnalyzer", "No cell info available");
             }
         }
+        return new nTuple(0, 0, 0);
     }
 
     private double calculateSNR(int rsrp, int rsrq) {

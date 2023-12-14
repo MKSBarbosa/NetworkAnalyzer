@@ -20,7 +20,7 @@ public class PingApplication {
         this.pingTextView = pv;
     }
 
-    public void getLatency() {
+    public int getLatency() {
         final List<Double> rttValues = new ArrayList<>();
 
         Thread thread = new Thread(new Runnable() {
@@ -63,8 +63,6 @@ public class PingApplication {
 
         Log.d("NetworkAnalyzer", "Average Ping RTT result: " + average + " ms");
         pingTextView.setText(String.valueOf((int) average) + " ms");
+        return (int) average;
     }
-
-
-
 }
