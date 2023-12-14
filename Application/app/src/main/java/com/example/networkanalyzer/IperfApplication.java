@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.text.DecimalFormat;
@@ -33,7 +34,23 @@ public class IperfApplication {
         this.jitterdownloadUdpValue = jitterdownloadUdpValue;
         this.context = context;
     }
+    public class nTuple implements Serializable {
+        public final int value1;
+        public final int value2;
 
+        public nTuple(int value1, int value2) {
+            this.value1 = value1; //BitRate
+            this.value2 = value2; //Jitter
+        }
+
+        public int getBitRate() {
+            return value1;
+        }
+
+        public int getJitter() {
+            return value2;
+        }
+    }
 //    private void installIperf(Context context) {
 //            // Instala o Iperf
 //            try {
@@ -65,7 +82,7 @@ public class IperfApplication {
 //        }
 //    }
 
-    public void runIperfClient(String direction) {
+    public nTuple runIperfClient(String direction) {
         final List<Double> iperfValues = new ArrayList<>();
         String udpCommand;
 
@@ -122,6 +139,7 @@ public class IperfApplication {
             udpProcess.waitFor();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            return new nTuple(0,0);
         }
 
         DecimalFormat formato = new DecimalFormat("#.###");
@@ -135,7 +153,7 @@ public class IperfApplication {
         String numeroFormatado = formato.format(average);
 
         Log.d("NetworkAnalyzer", "Average Upload result: " + average + " Mbps");
-
+        return new nTuple(0,0);
 }
     public void runIperfServer() {
         String localIpAddress = getLocalIpAddress();

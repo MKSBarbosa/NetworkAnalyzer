@@ -63,16 +63,18 @@ public class TestActivity extends AppCompatActivity {
     private void initializeApplications() {
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
-        pingApp.getLatency();
+        int latency = pingApp.getLatency();
 
         // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
-        radioApp.updateRadioInfo(this);
+        RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
 
+        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,
+                Download_data, Jitter_data2);
+        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
+        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
 
         VideoApllication[] videoApp = new VideoApllication[3];
-
-
         int numThreads = 3;
         VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[3];
         Thread[] threads = new Thread[numThreads];
@@ -114,12 +116,7 @@ public class TestActivity extends AppCompatActivity {
             });
             threads[i].start();
         }
-
-
-
     }
-
-
     private void showSaveTestDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Você gostaria de salvar o teste?")
