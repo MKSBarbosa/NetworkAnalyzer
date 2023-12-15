@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,11 +33,7 @@ public class MainActivity extends AppCompatActivity {
         checkAndRequestPermissions();
 
         setContentView(R.layout.activity_main);
-        TextView server_ip = findViewById(R.id.server_ip);
-        TextView csv_name = findViewById(R.id.csv_name);
-        Spinner samples_number = findViewById(R.id.samples_number);
-        Spinner stream_number = findViewById(R.id.stream_number);
-        TextView quality_switch = findViewById(R.id.quality_switch);
+
         Button bt_start = findViewById(R.id.bt_start);
 
 
@@ -97,6 +94,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void goToTestWindow() {
+        TextView server_ip = findViewById(R.id.server_ip);
+        StorageClass.server_ip_Value = server_ip.getText().toString();
+
+        TextView csv_name = findViewById(R.id.csv_name);
+        StorageClass.csv_name_Value = csv_name.getText().toString();
+
+        Spinner samples_number = findViewById(R.id.samples_number);
+        StorageClass.samples_number_Value = samples_number.getSelectedItem().toString();
+
+        Spinner stream_number = findViewById(R.id.stream_number);
+        StorageClass.stream_number_Value = stream_number.getSelectedItem().toString();
+
+        Switch quality_switch = findViewById(R.id.quality_switch);
+        StorageClass.quality_switch_Value = quality_switch.getText().toString();
+
         Intent testWindowIntent = new Intent(this, com.example.networkanalyzer.TestActivity.class);
         startActivity(testWindowIntent);
     }
