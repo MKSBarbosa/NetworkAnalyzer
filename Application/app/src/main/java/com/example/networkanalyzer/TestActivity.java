@@ -37,6 +37,7 @@ public class TestActivity extends AppCompatActivity {
     VideoView videoView1, videoView2, videoView3;
     Button bt_start;
 
+    String server_ip_Value, csv_name_Value, samples_number_Value;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +66,9 @@ public class TestActivity extends AppCompatActivity {
         videoView3 = findViewById(R.id.videoView3);
         bt_start = findViewById(R.id.bt_stop);
 
-        String server_ip_Value = StorageClass.server_ip_Value;
-        String csv_name_Value = StorageClass.csv_name_Value;
-        String samples_number_Value = StorageClass.samples_number_Value;
+        server_ip_Value = StorageClass.server_ip_Value;
+        csv_name_Value = StorageClass.csv_name_Value;
+        samples_number_Value = StorageClass.samples_number_Value;
         String stream_number_Value = StorageClass.stream_number_Value;
         String quality_switch_Value = StorageClass.quality_switch_Value;
 
@@ -149,7 +150,7 @@ public class TestActivity extends AppCompatActivity {
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
         int latency = pingApp.getLatency();
-        dados.put("ping",latency);
+//        dados.put("ping",latency);
         //dados.put("ping",10);
         //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
@@ -157,24 +158,30 @@ public class TestActivity extends AppCompatActivity {
         // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
-        dados.put("rsrp",radioInfo.getRsrp());
-        dados.put("rsrq",radioInfo.getRsrq());
-        dados.put("snr",radioInfo.getSnr());
+//        dados.put("rsrp",radioInfo.getRsrp());
+//        dados.put("rsrq",radioInfo.getRsrq());
+//        dados.put("snr",radioInfo.getSnr());
         //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-        /*IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2);
+        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
         IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
-        dados.put("upload",iperfUpload.getBitRate());
-        dados.put("jitterU",iperfUpload.getJitter());*/
-        dados.put("upload",0);
-        dados.put("jitterU",0);
+        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
+        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
+
+//        dados.put("upload",iperfUpload.getBitRate());
+//        dados.put("jitterU",iperfUpload.getJitter());
+//        dados.put("upload",0);
+//        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
 
-        /*IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
-        dados.put("download",iperfDownload.getBitRate());
-        dados.put("jitterD",iperfDownload.getJitter());*/
-        dados.put("download",0);
-        dados.put("jitterD",0);
+        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
+        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
+
+//        dados.put("download",iperfDownload.getBitRate());
+//        dados.put("jitterD",iperfDownload.getJitter());
+//        dados.put("download",0);
+//        dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
 
 
