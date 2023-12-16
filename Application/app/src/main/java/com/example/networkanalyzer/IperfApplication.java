@@ -26,28 +26,31 @@ public class IperfApplication {
     private TextView downloadUdpValue;
     private TextView jitterdownloadUdpValue;
 
+    private String serverIp;
+
     public IperfApplication(Context context, TextView uploadUdpValue, TextView jitteruploadUdpValue,
-                            TextView downloadUdpValue, TextView jitterdownloadUdpValue) {
+                            TextView downloadUdpValue, TextView jitterdownloadUdpValue, String sIP) {
         this.uploadUdpValue = uploadUdpValue;
         this.jitteruploadUdpValue = jitteruploadUdpValue;
         this.downloadUdpValue = downloadUdpValue;
         this.jitterdownloadUdpValue = jitterdownloadUdpValue;
         this.context = context;
+        this.serverIp = sIP;
     }
     public class nTuple implements Serializable {
-        public final int value1;
-        public final int value2;
+        public final double value1;
+        public final double value2;
 
-        public nTuple(int value1, int value2) {
+        public nTuple(double value1, double value2) {
             this.value1 = value1; //BitRate
             this.value2 = value2; //Jitter
         }
 
-        public int getBitRate() {
+        public double getBitRate() {
             return value1;
         }
 
-        public int getJitter() {
+        public double getJitter() {
             return value2;
         }
     }
@@ -85,11 +88,10 @@ public class IperfApplication {
     public nTuple runIperfClient(String direction) {
         final List<Double> iperfValues = new ArrayList<>();
         String udpCommand;
-
         if(direction == "Upload"){
-            udpCommand = "/system/bin/iperf3 -c 172.27.9.53 -u -t 10 -b 20M -i 1";
+            udpCommand = "/system/bin/iperf3 -c 192.168.0.108 -u -t 10 -b 20M -i 1";
         }else{
-            udpCommand = "/system/bin/iperf3 -c 172.27.9.53 -u -t 10 -b 100M -i 1 -R";
+            udpCommand = "/system/bin/iperf3 -c 192.168.0.108 -u -t 10 -b 100M -i 1 -R";
         }
         try {
             // Executa o cliente UDP e captura a saída
@@ -108,6 +110,9 @@ public class IperfApplication {
             BufferedReader udpReader = new BufferedReader(new InputStreamReader(udpProcess.getInputStream()));
             String udpLine;
 
+            String bandwidthReceiver = "0";
+            String jitterReceiver = "0";
+
             while ((udpLine = udpReader.readLine()) != null) {
                 Log.d("Iperf Client", udpLine);
                 if(udpLine.contains("Mbits/sec")){
@@ -120,8 +125,8 @@ public class IperfApplication {
                         //getting the Bitrate report and the Jitter from the reciever
                         int endIndexJitter = udpLine.indexOf("ms");
 
-                        String bandwidthReceiver = udpLine.substring(startIndex + 7, endIndex);
-                        String jitterReceiver = udpLine.substring(endIndex + 11, endIndexJitter);
+                        bandwidthReceiver = udpLine.substring(startIndex + 7, endIndex);
+                        jitterReceiver = udpLine.substring(endIndex + 11, endIndexJitter);
 
                         if (direction == "Upload"){
                             uploadUdpValue.setText(bandwidthReceiver + " Mbps");
@@ -137,48 +142,12 @@ public class IperfApplication {
             }
             udpReader.close();
             udpProcess.waitFor();
+            return new nTuple(Double.parseDouble(bandwidthReceiver), Double.parseDouble(jitterReceiver));
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
             return new nTuple(0,0);
         }
-
-        DecimalFormat formato = new DecimalFormat("#.###");
-
-        // Calcula a média dos valores iPerf
-        double sum = 0;
-        for (double upload : iperfValues) {
-            sum += upload;
-        }
-        double average = sum / iperfValues.size();
-        String numeroFormatado = formato.format(average);
-
-        Log.d("NetworkAnalyzer", "Average Upload result: " + average + " Mbps");
-        return new nTuple(0,0);
 }
-    public void runIperfServer() {
-        String localIpAddress = getLocalIpAddress();
-        Log.d("IperfApplication", "Local IP Address: " + localIpAddress);
-
-        // Comando para executar o servidor Iperf
-        String serverCommand = "iperf -s";
-
-        try {
-            // Executa o servidor Iperf e captura a saída
-            Process serverProcess = Runtime.getRuntime().exec(serverCommand);
-            BufferedReader serverReader = new BufferedReader(new InputStreamReader(serverProcess.getInputStream()));
-            String serverLine;
-            while ((serverLine = serverReader.readLine()) != null) {
-                System.out.println(serverLine);
-                // Atualiza o TextView para mostrar a saída do servidor Iperf
-                // Lógica para atualizar as TextViews do servidor aqui
-            }
-            serverReader.close();
-            serverProcess.waitFor();
-        } catch (IOException | InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
     private String getLocalIpAddress() {
         try {
             Enumeration<NetworkInterface> networkInterfaces = NetworkInterface.getNetworkInterfaces();
