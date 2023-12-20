@@ -149,19 +149,19 @@ public class TestActivity extends AppCompatActivity {
         dados.put("snr",radioInfo.getSnr());
         //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-        /*IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2);
+        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2);
         IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
         dados.put("upload",iperfUpload.getBitRate());
-        dados.put("jitterU",iperfUpload.getJitter());*/
-        dados.put("upload",0);
-        dados.put("jitterU",0);
+        dados.put("jitterU",iperfUpload.getJitter());
+//        dados.put("upload",0);
+//        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
 
-        /*IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
         dados.put("download",iperfDownload.getBitRate());
-        dados.put("jitterD",iperfDownload.getJitter());*/
-        dados.put("download",0);
-        dados.put("jitterD",0);
+        dados.put("jitterD",iperfDownload.getJitter());
+        //dados.put("download",0);
+        //dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
 
 
