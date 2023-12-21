@@ -32,19 +32,21 @@ import java.util.concurrent.CountDownLatch;
 public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data, Jitter_data2;
+    TextView round;
     TextView Vazao1_data, Loadtime1_data, Vazao2_data, Loadtime2_data, Vazao3_data, Loadtime3_data;
     TextView Average_Output, Average_Loadtime;
     VideoView videoView1, videoView2, videoView3;
-    Button bt_start;
-
+    Button bt_stop;
     String server_ip_Value, csv_name_Value, samples_number_Value;
+    String stream_number_Value;
+    int counter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-
+        counter = 0;
         RSRP_data = findViewById(R.id.RSRP_data);
         RSRQ_data = findViewById(R.id.RSRQ_data);
         SNR_data = findViewById(R.id.SNR_data);
@@ -64,12 +66,13 @@ public class TestActivity extends AppCompatActivity {
         videoView1 = findViewById(R.id.videoView1);
         videoView2 = findViewById(R.id.videoView2);
         videoView3 = findViewById(R.id.videoView3);
-        bt_start = findViewById(R.id.bt_stop);
+        bt_stop = findViewById(R.id.bt_stop);
+        round = findViewById(R.id.counter);
 
         server_ip_Value = StorageClass.server_ip_Value;
         csv_name_Value = StorageClass.csv_name_Value;
         samples_number_Value = StorageClass.samples_number_Value;
-        String stream_number_Value = StorageClass.stream_number_Value;
+        stream_number_Value = StorageClass.stream_number_Value;
         String quality_switch_Value = StorageClass.quality_switch_Value;
 
 
@@ -80,9 +83,9 @@ public class TestActivity extends AppCompatActivity {
         Log.d("Storage Class", "quality_switch_Value: " + quality_switch_Value);
 
         // exibir o AlertDialog quando o botão for clicadp
-        bt_start.setOnClickListener(v -> showSaveTestDialog());
-
+        bt_stop.setOnClickListener(v -> showSaveTestDialog());
         initializeApplications();
+
     }
     private void sendCSV(Map<String, Object> dados) {
         Thread threadSend = new Thread(new Runnable() {
@@ -143,10 +146,13 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void initializeApplications() {
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("id", "Marcelo");
-        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", 'ping', 'vazao', 'tempoDeCarregamento']
 
+        counter = counter + 1;
+        round.setText(String.valueOf(counter));
+        Log.d("Initialize App", "Round: " + counter);
+        Map<String, Object> dados = new HashMap<>();
+        dados.put("id", csv_name_Value);
+        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", 'ping', 'vazao', 'tempoDeCarregamento']
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
         int latency = pingApp.getLatency();
@@ -163,15 +169,26 @@ public class TestActivity extends AppCompatActivity {
         dados.put("snr",radioInfo.getSnr());
         //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
+//        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
+//        speedTestTask.runSpeedTest();
 
-        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
-        speedTestTask.runSpeedTest();
+        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
+        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
+        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
+        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
 
-//        Log.d("Speed Result", "initializeApplications: " + speedResult[0]);
+        dados.put("upload",iperfUpload.getBitRate());
+        dados.put("jitterU",iperfUpload.getJitter());
 //        dados.put("upload",0);
 //        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
 
+        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
+        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
+
+        dados.put("download",iperfDownload.getBitRate());
+        dados.put("jitterD",iperfDownload.getJitter());
 //        dados.put("download",0);
 //        dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
@@ -183,7 +200,6 @@ public class TestActivity extends AppCompatActivity {
         final double[] averageThroughput = {0};
         final double[] averageLoadTime = {0};
         final int[] numberMedia = {0};
-
 
         Handler handler = new Handler(Looper.getMainLooper()) {
             @Override
@@ -201,10 +217,18 @@ public class TestActivity extends AppCompatActivity {
                         dados.put("vazao",averageThroughput[0]/3);
                         dados.put("tempoDeCarregamento",averageLoadTime[0]/3);
                         sendCSV(dados);
-
+                        numberMedia[0]=0;
+//                        Log.d("Handle", "Enviou o csv");
+//                        for(int i =0; i< numThreads; i++) {
+//                            threads[i].interrupt();
+//                        }
+//                        Log.d("Handle", "samples: " + samples_number_Value);
+//                        int numSamples = Integer.parseInt(samples_number_Value);
+//                        if(counter < numSamples){
+//                            Log.d("Handle", "Entrou no if");
+//                            initializeApplications();
+//                        }
                     }
-
-
                     Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
                 }
             }
