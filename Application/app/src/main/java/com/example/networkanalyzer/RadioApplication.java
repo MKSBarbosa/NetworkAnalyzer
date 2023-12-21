@@ -63,11 +63,11 @@ public class RadioApplication {
                             int rsrp = cellSignalStrengthNr.getSsRsrp();
                             int rsrq = cellSignalStrengthNr.getSsRsrq();
                             int sinr = cellSignalStrengthNr.getSsSinr();
-                            double snr = calculateSNR(rsrp, sinr);
+                            int snr = (int)calculateSNR(rsrp, sinr);
                             rsrpTextView.setText(String.valueOf(rsrp) + " dBm");
                             rsrqTextView.setText(String.valueOf(rsrq) + " dB");
                             snrTextView.setText(String.valueOf(snr) + " dB");
-                            nTuple radioInfo = new nTuple(rsrp, rsrq, sinr);
+                            nTuple radioInfo = new nTuple(rsrp, rsrq, snr);
                             Log.d("Signal Strength", "Net Type 5G | RSRP: " + String.valueOf(rsrp) + " dBm | RSRQ: " + String.valueOf(rsrq) + " dB | SNR: " + String.valueOf(snr) + " dB");
                             return  radioInfo;
                         }

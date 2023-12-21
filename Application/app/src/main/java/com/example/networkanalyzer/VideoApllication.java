@@ -40,7 +40,7 @@ public class VideoApllication {
         this.tempoDeCarregamentoValueTextView = timeDownText;
         this.handler = handler;
 
-        this.videoUrl = "http://172.27.9.239:3001/video";
+        this.videoUrl = "http://192.168.70.135:3001/video";
     }
 
 

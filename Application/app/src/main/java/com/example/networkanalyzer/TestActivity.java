@@ -90,7 +90,7 @@ public class TestActivity extends AppCompatActivity {
             public void run() {
                 try {
                     // URL do servidor Python
-                    String serverURL = "http://172.27.9.239:3001/registrar_dados";
+                    String serverURL = "http://192.168.70.135:3001/registrar_dados";
 
                     // Criar objeto URL com a URL do servidor
                     URL url = new URL(serverURL);
@@ -150,7 +150,7 @@ public class TestActivity extends AppCompatActivity {
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
         int latency = pingApp.getLatency();
-//        dados.put("ping",latency);
+        dados.put("ping",latency);
         //dados.put("ping",10);
         //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
@@ -158,33 +158,23 @@ public class TestActivity extends AppCompatActivity {
         // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
-//        dados.put("rsrp",radioInfo.getRsrp());
-//        dados.put("rsrq",radioInfo.getRsrq());
-//        dados.put("snr",radioInfo.getSnr());
+        dados.put("rsrp",radioInfo.getRsrp());
+        dados.put("rsrq",radioInfo.getRsrq());
+        dados.put("snr",radioInfo.getSnr());
         //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
-        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
-        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
-        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
 
-//        dados.put("upload",iperfUpload.getBitRate());
-//        dados.put("jitterU",iperfUpload.getJitter());
+        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
+        speedTestTask.runSpeedTest();
+
+//        Log.d("Speed Result", "initializeApplications: " + speedResult[0]);
 //        dados.put("upload",0);
 //        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
 
-        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
-        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
-        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
-
-//        dados.put("download",iperfDownload.getBitRate());
-//        dados.put("jitterD",iperfDownload.getJitter());
 //        dados.put("download",0);
 //        dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
-
-
 
         VideoApllication[] videoApp = new VideoApllication[3];
         int numThreads = 3;
