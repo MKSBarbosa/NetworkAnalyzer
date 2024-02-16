@@ -146,8 +146,17 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void initializeApplications() {
+        videoView1.stopPlayback();
+        videoView2.stopPlayback();
+        videoView3.stopPlayback();
+        videoView1 = findViewById(R.id.videoView1);
+        videoView2 = findViewById(R.id.videoView2);
+        videoView3 = findViewById(R.id.videoView3);
 
-        counter = counter + 1;
+        int numSamples = Integer.parseInt(samples_number_Value);
+        //for (counter=0;counter < numSamples;counter++){
+
+
         round.setText(String.valueOf(counter));
         Log.d("Initialize App", "Round: " + counter);
         Map<String, Object> dados = new HashMap<>();
@@ -156,7 +165,7 @@ public class TestActivity extends AppCompatActivity {
 
         PingApplication pingApp = new PingApplication(this, Ping_data);
         int latency = pingApp.getLatency();
-        dados.put("ping",latency);
+        dados.put("ping", latency);
         //dados.put("ping",10);
         //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
@@ -164,21 +173,21 @@ public class TestActivity extends AppCompatActivity {
         // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
-        dados.put("rsrp",radioInfo.getRsrp());
-        dados.put("rsrq",radioInfo.getRsrq());
-        dados.put("snr",radioInfo.getSnr());
+        dados.put("rsrp", radioInfo.getRsrp());
+        dados.put("rsrq", radioInfo.getRsrq());
+        dados.put("snr", radioInfo.getSnr());
         //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
 //        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
 //        speedTestTask.runSpeedTest();
 
-        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
+        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data, Download_data, Jitter_data2, server_ip_Value);
         IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
         Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
         Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
 
-        dados.put("upload",iperfUpload.getBitRate());
-        dados.put("jitterU",iperfUpload.getJitter());
+        dados.put("upload", iperfUpload.getBitRate());
+        dados.put("jitterU", iperfUpload.getJitter());
 //        dados.put("upload",0);
 //        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
@@ -187,8 +196,8 @@ public class TestActivity extends AppCompatActivity {
         Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
         Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
 
-        dados.put("download",iperfDownload.getBitRate());
-        dados.put("jitterD",iperfDownload.getJitter());
+        dados.put("download", iperfDownload.getBitRate());
+        dados.put("jitterD", iperfDownload.getJitter());
 //        dados.put("download",0);
 //        dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
@@ -208,36 +217,39 @@ public class TestActivity extends AppCompatActivity {
                     Bundle bundle = msg.getData();
                     VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
                     // Faça o que for necessário com a receivedTuple
-                    averageThroughput[0] +=receivedTuple.getDownloadValue();
-                    averageLoadTime[0] +=receivedTuple.getLoadTimeValue();
+                    averageThroughput[0] += receivedTuple.getDownloadValue();
+                    averageLoadTime[0] += receivedTuple.getLoadTimeValue();
                     numberMedia[0]++;
-                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]/3));
+                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0] / 3));
                     Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0] / 3));
-                    if(numberMedia[0]==3){
-                        dados.put("vazao",averageThroughput[0]/3);
-                        dados.put("tempoDeCarregamento",averageLoadTime[0]/3);
+                    if (numberMedia[0] == 3) {
+                        dados.put("vazao", averageThroughput[0] / 3);
+                        dados.put("tempoDeCarregamento", averageLoadTime[0] / 3);
                         sendCSV(dados);
-                        numberMedia[0]=0;
+                        numberMedia[0] = 0;
 //                        Log.d("Handle", "Enviou o csv");
-//                        for(int i =0; i< numThreads; i++) {
-//                            threads[i].interrupt();
-//                        }
+
 //                        Log.d("Handle", "samples: " + samples_number_Value);
-//                        int numSamples = Integer.parseInt(samples_number_Value);
-//                        if(counter < numSamples){
-//                            Log.d("Handle", "Entrou no if");
-//                            initializeApplications();
-//                        }
+                        int numSamples = Integer.parseInt(samples_number_Value);
+                        if(counter < numSamples){
+                            Log.d("Handle", "Entrou no if");
+
+                            counter +=1;
+
+
+                            initializeApplications();
+
+                        }
                     }
                     Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
                 }
             }
         };
-        videoApp[0] = new VideoApllication(this, videoView1,Vazao1_data, Loadtime1_data,handler);
-        videoApp[1] = new VideoApllication(this, videoView2,Vazao2_data, Loadtime2_data, handler);
-        videoApp[2] = new VideoApllication(this, videoView3,Vazao3_data, Loadtime3_data, handler);
+        videoApp[0] = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, handler);
+        videoApp[1] = new VideoApllication(this, videoView2, Vazao2_data, Loadtime2_data, handler);
+        videoApp[2] = new VideoApllication(this, videoView3, Vazao3_data, Loadtime3_data, handler);
 
-        for(int i =0; i< numThreads; i++){
+        for (int i = 0; i < numThreads; i++) {
             final int index = i; // Criando uma cópia final de i
 
             threads[i] = new Thread(new Runnable() {
@@ -251,6 +263,7 @@ public class TestActivity extends AppCompatActivity {
             });
             threads[i].start();
         }
+    //}
     }
     private void showSaveTestDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
