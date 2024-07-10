@@ -153,7 +153,7 @@ public class TestActivity extends AppCompatActivity {
         videoView2 = findViewById(R.id.videoView2);
         videoView3 = findViewById(R.id.videoView3);
 
-        int numSamples = Integer.parseInt(samples_number_Value);
+        int numSamples = 2;
         //for (counter=0;counter < numSamples;counter++){
 
 
@@ -181,30 +181,30 @@ public class TestActivity extends AppCompatActivity {
 //        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
 //        speedTestTask.runSpeedTest();
 
-        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data, Download_data, Jitter_data2, server_ip_Value);
-        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
-        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
-        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
-
-        dados.put("upload", iperfUpload.getBitRate());
-        dados.put("jitterU", iperfUpload.getJitter());
-//        dados.put("upload",0);
-//        dados.put("jitterU",0);
+//        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data, Download_data, Jitter_data2, server_ip_Value);
+//        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
+//        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
+//        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
+//
+//        dados.put("upload", iperfUpload.getBitRate());
+//        dados.put("jitterU", iperfUpload.getJitter());
+        dados.put("upload",0);
+        dados.put("jitterU",0);
         //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
 
-        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
-        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
-        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
-
-        dados.put("download", iperfDownload.getBitRate());
-        dados.put("jitterD", iperfDownload.getJitter());
-//        dados.put("download",0);
-//        dados.put("jitterD",0);
+//        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
+//        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
+//        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
+//
+//        dados.put("download", iperfDownload.getBitRate());
+//        dados.put("jitterD", iperfDownload.getJitter());
+        dados.put("download",0);
+        dados.put("jitterD",0);
         //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
 
-        VideoApllication[] videoApp = new VideoApllication[3];
-        int numThreads = 3;
-        VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[3];
+        VideoApllication[] videoApp = new VideoApllication[1];
+        int numThreads = 1;
+        VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[1];
         Thread[] threads = new Thread[numThreads];
         final double[] averageThroughput = {0};
         final double[] averageLoadTime = {0};
@@ -220,25 +220,21 @@ public class TestActivity extends AppCompatActivity {
                     averageThroughput[0] += receivedTuple.getDownloadValue();
                     averageLoadTime[0] += receivedTuple.getLoadTimeValue();
                     numberMedia[0]++;
-                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0] / 3));
-                    Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0] / 3));
-                    if (numberMedia[0] == 3) {
-                        dados.put("vazao", averageThroughput[0] / 3);
-                        dados.put("tempoDeCarregamento", averageLoadTime[0] / 3);
+                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]));
+                    Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0]));
+                    if (numberMedia[0] == 1) {
+                        dados.put("vazao", averageThroughput[0]);
+                        dados.put("tempoDeCarregamento", averageLoadTime[0]);
                         sendCSV(dados);
                         numberMedia[0] = 0;
 //                        Log.d("Handle", "Enviou o csv");
 
 //                        Log.d("Handle", "samples: " + samples_number_Value);
-                        int numSamples = Integer.parseInt(samples_number_Value);
+                        int numSamples = 2;
                         if(counter < numSamples){
                             Log.d("Handle", "Entrou no if");
-
                             counter +=1;
-
-
                             initializeApplications();
-
                         }
                     }
                     Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
@@ -246,8 +242,8 @@ public class TestActivity extends AppCompatActivity {
             }
         };
         videoApp[0] = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, handler);
-        videoApp[1] = new VideoApllication(this, videoView2, Vazao2_data, Loadtime2_data, handler);
-        videoApp[2] = new VideoApllication(this, videoView3, Vazao3_data, Loadtime3_data, handler);
+//        videoApp[1] = new VideoApllication(this, videoView2, Vazao2_data, Loadtime2_data, handler);
+//        videoApp[2] = new VideoApllication(this, videoView3, Vazao3_data, Loadtime3_data, handler);
 
         for (int i = 0; i < numThreads; i++) {
             final int index = i; // Criando uma cópia final de i

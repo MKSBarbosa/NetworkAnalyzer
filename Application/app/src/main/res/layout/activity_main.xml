@@ -65,7 +65,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:background="#FFFFFF"
-        android:hint="User Id (e.g. Nairobi, Berlin)"
+        android:text="Berlin1"
         android:inputType="text"
         android:textColor="#303030"
         android:textColorHint="#757575"
