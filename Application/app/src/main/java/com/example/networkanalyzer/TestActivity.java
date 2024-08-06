@@ -145,7 +145,7 @@ public class TestActivity extends AppCompatActivity {
         dados.put("upload", 0);
         dados.put("download", 0);
 
-        VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, quality_video_value, new Handler(Looper.getMainLooper()) {
+        VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
             @Override
             public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 1) {
