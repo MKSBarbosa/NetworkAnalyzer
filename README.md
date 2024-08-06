@@ -16,7 +16,7 @@ NetworkAnalyzer/
 └── server/
     ├── server.py
     └── speedserver.py
-
+```
 
 ## Descrição das aplicações
 
@@ -73,5 +73,6 @@ python3 server.py
 ### Observações
 
 1. Certifique-se de que a pasta onde os vídeos estão armazenados está corretamente configurada no server.py.
-
 2. speedserver.py está em desenvolvimento e ainda não está disponível para uso.
+3. O app apresenta um bug, as requisições do video sempre ocorrem sample+1, ou seja, se for testado 1, vai 2, se for 3, vai 4, se for 5, vai 6.
+4. Entre as solicitações do video o app pode apresentar instabilidade, aguardar, pois irá funcionar normalmente. 
