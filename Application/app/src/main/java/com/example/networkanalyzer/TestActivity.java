@@ -1,8 +1,8 @@
 package com.example.networkanalyzer;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -24,18 +24,17 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 public class TestActivity extends AppCompatActivity {
 
-    TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data, Jitter_data, Jitter_data2;
+    TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data;
     TextView round;
-    TextView Vazao1_data, Loadtime1_data, Vazao2_data, Loadtime2_data, Vazao3_data, Loadtime3_data;
-    TextView Average_Output, Average_Loadtime;
-    VideoView videoView1, videoView2, videoView3;
+    TextView Vazao1_data, Loadtime1_data;
+    VideoView videoView1;
     Button bt_stop;
     String server_ip_Value, csv_name_Value, samples_number_Value, quality_video_value;
     int counter;
@@ -45,240 +44,151 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
+        initializeViews();
+        retrieveStorageValues();
+        LogStorageValues();
+
+        bt_stop.setOnClickListener(v -> showSaveTestDialog());
+        initializeApplications();
+    }
+
+    private void initializeViews() {
         counter = 0;
+
         RSRP_data = findViewById(R.id.RSRP_data);
         RSRQ_data = findViewById(R.id.RSRQ_data);
         SNR_data = findViewById(R.id.SNR_data);
+
         Ping_data = findViewById(R.id.Ping_data);
         Download_data = findViewById(R.id.Download_data);
         Upload_data = findViewById(R.id.Upload_data);
-        Jitter_data = findViewById(R.id.Jitter_data);
-        Jitter_data2 = findViewById(R.id.Jitter_data2);
+
         Vazao1_data = findViewById(R.id.Vazao1_data);
         Loadtime1_data = findViewById(R.id.Loadtime1_data);
-        Vazao2_data = findViewById(R.id.Vazao2_data);
-        Loadtime2_data = findViewById(R.id.Loadtime2_data);
-        Vazao3_data = findViewById(R.id.Vazao3_data);
-        Loadtime3_data = findViewById(R.id.Loadtime3_data);
-        Average_Output = findViewById(R.id.Avarage_Output);
-        Average_Loadtime = findViewById(R.id.Avarage_Loadtime);
+
         videoView1 = findViewById(R.id.videoView1);
-        videoView2 = findViewById(R.id.videoView2);
-        videoView3 = findViewById(R.id.videoView3);
         bt_stop = findViewById(R.id.bt_stop);
         round = findViewById(R.id.counter);
+    }
 
+    private void retrieveStorageValues() {
         server_ip_Value = StorageClass.server_ip_Value;
         csv_name_Value = StorageClass.csv_name_Value;
         samples_number_Value = StorageClass.samples_number_Value;
         quality_video_value = StorageClass.quality_video_value;
+    }
 
-
+    private void LogStorageValues() {
         Log.d("Storage Class", "server_ip_Value: " + server_ip_Value);
         Log.d("Storage Class", "csv_name_Value: " + csv_name_Value);
         Log.d("Storage Class", "samples_number_Value: " + samples_number_Value);
         Log.d("Storage Class", "quality_video_value: " + quality_video_value);
-
-        // exibir o AlertDialog quando o botão for clicadp
-        bt_stop.setOnClickListener(v -> showSaveTestDialog());
-        initializeApplications();
-
     }
+
     private void sendCSV(Map<String, Object> dados) {
-        Thread threadSend = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    // URL do servidor Python
-                    String serverURL = "http://192.168.73.135:3001/registrar_dados";
+        new Thread(() -> {
+            try {
+                String serverURL = "http://" + server_ip_Value + ":3001/registrar_dados";
+                URL url = new URL(serverURL);
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept", "application/json");
+                conn.setDoOutput(true);
 
-                    // Criar objeto URL com a URL do servidor
-                    URL url = new URL(serverURL);
-
-                    // Abrir conexão HTTP
-                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                    conn.setRequestMethod("POST");
-                    conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                    conn.setRequestProperty("Accept", "application/json");
-                    conn.setDoOutput(true);
-                    conn.setDoInput(true);
-
-                    // Converter os dados para JSON
-                    JSONObject jsonParam = new JSONObject(dados);
-
-                    // Enviar os dados para o servidor
-                    OutputStream os = conn.getOutputStream();
-                    BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, "UTF-8"));
+                JSONObject jsonParam = new JSONObject(dados);
+                try (OutputStream os = conn.getOutputStream();
+                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(os, StandardCharsets.UTF_8))) {
                     writer.write(jsonParam.toString());
                     writer.flush();
-                    writer.close();
-                    os.close();
+                }
 
-                    // Verificar a resposta do servidor
-                    int responseCode = conn.getResponseCode();
-                    if (responseCode == HttpURLConnection.HTTP_OK) {
-                        // Se o envio foi bem-sucedido
-                        BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                        StringBuffer response = new StringBuffer();
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    try (BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()))) {
+                        StringBuilder response = new StringBuilder();
                         String line;
                         while ((line = in.readLine()) != null) {
                             response.append(line);
                         }
-                        in.close();
                         Log.d("ServerResponse", response.toString());
-                    } else {
-                        // Se houve um erro no envio
-                        Log.e("ServerResponse", "Erro ao enviar os dados para o servidor. Código de resposta: " + responseCode);
                     }
-
-                    conn.disconnect();
-                } catch (Exception e) {
-                    e.printStackTrace();
+                } else {
+                    Log.e("ServerResponse", "Erro ao enviar os dados para o servidor. Código de resposta: " + responseCode);
                 }
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-
-        // Iniciar a thread para enviar os dados
-        threadSend.start();
+        }).start();
     }
 
     private void initializeApplications() {
         videoView1.stopPlayback();
-        videoView2.stopPlayback();
-        videoView3.stopPlayback();
-        videoView1 = findViewById(R.id.videoView1);
-        videoView2 = findViewById(R.id.videoView2);
-        videoView3 = findViewById(R.id.videoView3);
-        
+
         round.setText(String.valueOf(counter));
         Log.d("Initialize App", "Round: " + counter);
+
         Map<String, Object> dados = new HashMap<>();
         dados.put("id", csv_name_Value);
-        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", 'ping', 'vazao', 'tempoDeCarregamento']
 
-        PingApplication pingApp = new PingApplication(this, Ping_data);
+        PingApplication pingApp = new PingApplication(this, Ping_data, server_ip_Value);
         int latency = pingApp.getLatency();
         dados.put("ping", latency);
-        //dados.put("ping",10);
-        //['','rsrp', 'rsrq', 'snr', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-
-        // Initialize applications here
         RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
         RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
         dados.put("rsrp", radioInfo.getRsrp());
         dados.put("rsrq", radioInfo.getRsrq());
         dados.put("snr", radioInfo.getSnr());
-        //['','', '', '', 'download', 'upload', 'jitterD',"jitterU", '', 'vazao', 'tempoDeCarregamento']
 
-//        SpeedTestApplication speedTestTask = new SpeedTestApplication(Upload_data, Jitter_data,Download_data, Jitter_data2, server_ip_Value);
-//        speedTestTask.runSpeedTest();
+        dados.put("upload", 0);
+        dados.put("download", 0);
 
-//        IperfApplication iperfApp = new IperfApplication(this, Upload_data, Jitter_data, Download_data, Jitter_data2, server_ip_Value);
-//        IperfApplication.nTuple iperfUpload = iperfApp.runIperfClient("Upload");
-//        Log.d("Iperf Result", "Iperf Upload:" + iperfUpload.getBitRate());
-//        Log.d("Iperf Result", "Iperf jitter:" + iperfUpload.getJitter());
-//
-//        dados.put("upload", iperfUpload.getBitRate());
-//        dados.put("jitterU", iperfUpload.getJitter());
-        dados.put("upload",0);
-        dados.put("jitterU",0);
-        //['','', '', '', 'download', '', 'jitterD',"", '', 'vazao', 'tempoDeCarregamento']
-
-//        IperfApplication.nTuple iperfDownload = iperfApp.runIperfClient("Download");
-//        Log.d("Iperf Result", "Iperf Download:" + iperfDownload.getBitRate());
-//        Log.d("Iperf Result", "Iperf jitter:" + iperfDownload.getJitter());
-//
-//        dados.put("download", iperfDownload.getBitRate());
-//        dados.put("jitterD", iperfDownload.getJitter());
-        dados.put("download",0);
-        dados.put("jitterD",0);
-        //['','', '', '', '', '', '','', '', 'vazao', 'tempoDeCarregamento']
-
-        VideoApllication[] videoApp = new VideoApllication[1];
-        int numThreads = 1;
-        VideoApllication.MyTuple[] myTupleArray = new VideoApllication.MyTuple[1];
-        Thread[] threads = new Thread[numThreads];
-        final double[] averageThroughput = {0};
-        final double[] averageLoadTime = {0};
-        final int[] numberMedia = {0};
-
-        Handler handler = new Handler(Looper.getMainLooper()) {
+        VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, quality_video_value, new Handler(Looper.getMainLooper()) {
             @Override
-            public void handleMessage(Message msg) {
+            public void handleMessage(@NonNull Message msg) {
                 if (msg.what == 1) {
                     Bundle bundle = msg.getData();
                     VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
-                    // Faça o que for necessário com a receivedTuple
-                    averageThroughput[0] += receivedTuple.getDownloadValue();
-                    averageLoadTime[0] += receivedTuple.getLoadTimeValue();
-                    numberMedia[0]++;
-                    Average_Output.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput[0]));
-                    Average_Loadtime.setText(String.format(Locale.US, "%.2f s", averageLoadTime[0]));
-                    if (numberMedia[0] == 1) {
-                        dados.put("vazao", averageThroughput[0]);
-                        dados.put("tempoDeCarregamento", averageLoadTime[0]);
-                        sendCSV(dados);
-                        numberMedia[0] = 0;
-//                        Log.d("Handle", "Enviou o csv");
+                    if (receivedTuple != null) {
+                        double averageThroughput = receivedTuple.getDownloadValue();
+                        double averageLoadTime = receivedTuple.getLoadTimeValue();
+                        // Atualiza os TextViews Vazao1_data e Loadtime1_data
+                        Vazao1_data.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput));
+                        Loadtime1_data.setText(String.format(Locale.US, "%.2f s", averageLoadTime));
 
-//                        Log.d("Handle", "samples: " + samples_number_Value);
+                        dados.put("vazao", averageThroughput);
+                        dados.put("tempoDeCarregamento", averageLoadTime);
+                        sendCSV(dados);
+
                         int numSamples = Integer.parseInt(samples_number_Value);
-                        if(counter < numSamples){
-                            Log.d("Handle", "Entrou no if");
-                            counter +=1;
+                        if (counter < numSamples) {
+                            counter++;
                             initializeApplications();
                         }
                     }
-                    Log.d("TupleValues", "Download: " + String.valueOf(receivedTuple.getDownloadValue()) + " Tempo de carregamento: " + String.valueOf(receivedTuple.getLoadTimeValue()));
                 }
             }
-        };
-        videoApp[0] = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, quality_video_value, handler);
-//        videoApp[1] = new VideoApllication(this, videoView2, Vazao2_data, Loadtime2_data, handler);
-//        videoApp[2] = new VideoApllication(this, videoView3, Vazao3_data, Loadtime3_data, handler);
+        });
 
-        for (int i = 0; i < numThreads; i++) {
-            final int index = i; // Criando uma cópia final de i
-
-            threads[i] = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    // Realize qualquer ação que precise ser feita na thread secundária aqui
-                    // Utilize a cópia final de i (index) para acessar o elemento correto do array videoApp
-                    videoApp[index].fetchAndDisplayVideo();
-
-                }
-            });
-            threads[i].start();
-        }
-    //}
+        new Thread(videoApp::fetchAndDisplayVideo).start();
     }
-    private void showSaveTestDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Você gostaria de salvar o teste?")
-                .setPositiveButton("Sim", (dialog, id) -> {
-                    // Lógica para salvar o teste aqui
-                    Toast.makeText(TestActivity.this, "Teste salvo!", Toast.LENGTH_SHORT).show();
-                    // Ir para ResultActivity
-                    Intent resultIntent = new Intent(TestActivity.this, ResultActivity.class);
-                    startActivity(resultIntent);
 
-                    // Encerrar a TestActivity
+    private void showSaveTestDialog() {
+        new AlertDialog.Builder(this)
+                .setMessage("Você gostaria de salvar o teste?")
+                .setPositiveButton("Sim", (dialog, id) -> {
+                    Toast.makeText(TestActivity.this, "Teste salvo!", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(TestActivity.this, ResultActivity.class));
                     finish();
                 })
                 .setNegativeButton("Não", (dialog, id) -> {
-                    // Lógica para lidar com o "Não" aqui
                     Toast.makeText(TestActivity.this, "Teste não salvo.", Toast.LENGTH_SHORT).show();
-                    // Voltar para MainActivity
-                    Intent mainIntent = new Intent(TestActivity.this, MainActivity.class);
-                    startActivity(mainIntent);
-                    // Encerrar a TestActivity
+                    startActivity(new Intent(TestActivity.this, MainActivity.class));
                     finish();
-                });
-
-        // Crie e exiba o AlertDialog
-        AlertDialog dialog = builder.create();
-        dialog.show();
+                })
+                .create()
+                .show();
     }
 }

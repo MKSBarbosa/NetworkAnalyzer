@@ -27,8 +27,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/background_radio"
-            android:layout_width="333dp"
-            android:layout_height="178dp"
+            android:layout_width="335dp"
+            android:layout_height="154dp"
             android:layout_marginTop="24dp"
             android:background="#243591"
             android:minHeight="?attr/actionBarSize"
@@ -42,8 +42,8 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/background_rede"
-            android:layout_width="372dp"
-            android:layout_height="174dp"
+            android:layout_width="332dp"
+            android:layout_height="105dp"
             android:layout_marginTop="24dp"
             android:background="#243591"
             android:minHeight="?attr/actionBarSize"
@@ -57,18 +57,18 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/background_stream"
-            android:layout_width="333dp"
-            android:layout_height="547dp"
+            android:layout_width="341dp"
+            android:layout_height="167dp"
             android:layout_marginTop="24dp"
             android:background="#243591"
             android:minHeight="?attr/actionBarSize"
             android:theme="?attr/actionBarTheme"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.493"
+            app:layout_constraintHorizontal_bias="0.441"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/background_rede"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.066" />
 
         <Button
             android:id="@+id/bt_stop"
@@ -77,62 +77,13 @@
             android:layout_marginTop="32dp"
             android:layout_marginBottom="32dp"
             android:text="Stop"
-            android:textColorHighlight="#D12222"
+            android:textColorHighlight="#243591"
             android:textColorLink="#CA1818"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/background_stream"
             app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Vazao2_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="8dp"
-            android:text="Vazão"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/videoView1" />
-
-        <TextView
-            android:id="@+id/Loadtime2_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="38dp"
-            android:layout_marginBottom="8dp"
-            android:text="Load Time"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.4"
-            app:layout_constraintStart_toEndOf="@+id/videoView2"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao2_name" />
-
-        <TextView
-            android:id="@+id/Jitter_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="27dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="Jitter"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.66"
-            app:layout_constraintStart_toEndOf="@+id/Upload_name"
-            app:layout_constraintTop_toBottomOf="@+id/title_rede" />
 
         <TextView
             android:id="@+id/RSRQ_name"
@@ -147,7 +98,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.304"
+            app:layout_constraintHorizontal_bias="0.297"
             app:layout_constraintStart_toEndOf="@+id/RSRP_name"
             app:layout_constraintTop_toBottomOf="@+id/title_radio" />
 
@@ -159,7 +110,7 @@
             android:layout_marginTop="12dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Info de Rádio"
+            android:text="Radio Info"
             android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -173,25 +124,23 @@
             android:id="@+id/Loadtime1_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="26dp"
-            android:layout_marginTop="38dp"
-            android:layout_marginBottom="8dp"
-            android:text="Load Time"
+            android:text="Load Time:"
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.061"
             app:layout_constraintStart_toEndOf="@+id/videoView1"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao1_name" />
+            app:layout_constraintTop_toBottomOf="@+id/Vazao1_name"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/Upload_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="27dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Upload"
@@ -200,7 +149,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.369"
             app:layout_constraintStart_toEndOf="@+id/Download_name"
             app:layout_constraintTop_toBottomOf="@+id/title_rede" />
 
@@ -209,7 +158,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="Stream"
@@ -218,7 +167,7 @@
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.491"
+            app:layout_constraintHorizontal_bias="0.507"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/background_stream" />
 
@@ -226,35 +175,28 @@
             android:id="@+id/counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text=""
+            android:text="initiating ..."
             android:textColor="#ECE2E2"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/background_stream" />
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintStart_toEndOf="@+id/textView2"
+            app:layout_constraintTop_toBottomOf="@+id/title_stream"
+            app:layout_constraintVertical_bias="0.181" />
 
         <TextView
             android:id="@+id/title_rede"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="4dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Info de Rede"
+            android:text="Network Info"
             android:textColor="#ECE2E2"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.501"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/background_rede" />
 
@@ -262,69 +204,32 @@
             android:id="@+id/Ping_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="Ping"
+            android:text="RTT"
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintBottom_toBottomOf="@+id/background_rede"
+            app:layout_constraintEnd_toStartOf="@+id/Download_name"
+            app:layout_constraintHorizontal_bias="0.406"
             app:layout_constraintStart_toStartOf="@+id/background_rede"
-            app:layout_constraintTop_toBottomOf="@+id/title_rede" />
+            app:layout_constraintTop_toBottomOf="@+id/title_rede"
+            app:layout_constraintVertical_bias="0.339" />
 
         <TextView
             android:id="@+id/Vazao1_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="48dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginBottom="8dp"
-            android:text="Vazão"
+            android:layout_marginStart="8dp"
+            android:text="Data Rate: "
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/videoView1"
-            app:layout_constraintTop_toBottomOf="@+id/title_stream" />
-
-        <TextView
-            android:id="@+id/Loadtime3_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="52dp"
-            android:layout_marginBottom="8dp"
-            android:text="Load Time"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="1.2"
-            app:layout_constraintStart_toEndOf="@+id/videoView3"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao3_name" />
-
-        <TextView
-            android:id="@+id/loadtime3_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="8dp"
-            android:text="Média Vazão       Média Load Time"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.444"
-            app:layout_constraintStart_toStartOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/videoView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView2"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/RSRP_name"
@@ -333,16 +238,16 @@
             android:layout_marginStart="30dp"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
             android:text="RSRP"
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/background_radio"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.006"
             app:layout_constraintStart_toStartOf="@+id/background_radio"
-            app:layout_constraintTop_toBottomOf="@+id/title_radio" />
+            app:layout_constraintTop_toBottomOf="@+id/title_radio"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/SNR_name"
@@ -350,48 +255,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:layout_marginEnd="30dp"
-            android:layout_marginBottom="8dp"
             android:text="SNR"
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
+            app:layout_constraintBottom_toBottomOf="@+id/background_radio"
             app:layout_constraintEnd_toEndOf="@+id/background_radio"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toEndOf="@+id/RSRQ_name"
-            app:layout_constraintTop_toBottomOf="@+id/title_radio" />
-
-        <TextView
-            android:id="@+id/Vazao3_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="60dp"
-            android:layout_marginBottom="8dp"
-            android:text="Vazão"
-            android:textColor="#ECE2E2"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/toolbar"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/videoView2" />
+            app:layout_constraintTop_toBottomOf="@+id/title_radio"
+            app:layout_constraintVertical_bias="0.0" />
 
         <TextView
             android:id="@+id/Download_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="27dp"
-            android:layout_marginTop="32dp"
             android:text="Download"
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
             app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toEndOf="@+id/Ping_name"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="@+id/background_rede"
             app:layout_constraintTop_toBottomOf="@+id/title_rede"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.339" />
 
         <TextView
             android:id="@+id/AppName"
@@ -413,11 +301,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="34dp"
             android:layout_marginTop="12dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_radio"
             app:layout_constraintEnd_toEndOf="@+id/background_radio"
-            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintHorizontal_bias="0.047"
             app:layout_constraintStart_toStartOf="@+id/background_radio"
             app:layout_constraintTop_toBottomOf="@+id/RSRP_name"
             app:layout_constraintVertical_bias="0.0" />
@@ -427,11 +315,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
             app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.089"
+            app:layout_constraintHorizontal_bias="0.163"
             app:layout_constraintStart_toStartOf="@+id/background_rede"
             app:layout_constraintTop_toBottomOf="@+id/Ping_name"
             app:layout_constraintVertical_bias="0.0" />
@@ -440,168 +328,54 @@
             android:id="@+id/Download_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
             app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.311"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="@+id/background_rede"
             app:layout_constraintTop_toBottomOf="@+id/Download_name"
-            app:layout_constraintVertical_bias="0.193" />
+            app:layout_constraintVertical_bias="0.6" />
 
         <TextView
             android:id="@+id/Upload_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_rede"
             app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.563"
+            app:layout_constraintHorizontal_bias="0.836"
             app:layout_constraintStart_toStartOf="@+id/background_rede"
             app:layout_constraintTop_toBottomOf="@+id/Upload_name"
-            app:layout_constraintVertical_bias="0.193" />
+            app:layout_constraintVertical_bias="0.388" />
 
-        <TextView
-            android:id="@+id/Jitter_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toBottomOf="@+id/background_rede"
-            app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.888"
-            app:layout_constraintStart_toStartOf="@+id/background_rede"
-            app:layout_constraintTop_toBottomOf="@+id/Jitter_name"
-            app:layout_constraintVertical_bias="0.193" />
-
-        <TextView
-            android:id="@+id/Jitter_data2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toBottomOf="@+id/background_rede"
-            app:layout_constraintEnd_toEndOf="@+id/background_rede"
-            app:layout_constraintHorizontal_bias="0.889"
-            app:layout_constraintStart_toStartOf="@+id/background_rede"
-            app:layout_constraintTop_toBottomOf="@+id/Jitter_data"
-            app:layout_constraintVertical_bias="0.687" />
 
         <TextView
             android:id="@+id/Vazao1_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/Loadtime1_name"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.436"
-            app:layout_constraintStart_toEndOf="@+id/videoView1"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao1_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.366"
+            app:layout_constraintStart_toEndOf="@+id/Vazao1_name"
+            app:layout_constraintTop_toBottomOf="@+id/counter"
+            app:layout_constraintVertical_bias="0.042" />
 
         <TextView
             android:id="@+id/Loadtime1_data"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="8dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/Vazao2_name"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.412"
-            app:layout_constraintStart_toEndOf="@+id/videoView1"
-            app:layout_constraintTop_toBottomOf="@+id/Loadtime1_name"
-            app:layout_constraintVertical_bias="0.0" />
-
-
-        <TextView
-            android:id="@+id/Vazao2_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/Loadtime2_name"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.483"
-            app:layout_constraintStart_toEndOf="@+id/videoView2"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao2_name"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <TextView
-            android:id="@+id/Loadtime2_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="64dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/Vazao3_name"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.946"
-            app:layout_constraintStart_toEndOf="@+id/videoView2"
-            app:layout_constraintTop_toBottomOf="@+id/Loadtime2_name"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Vazao3_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toTopOf="@+id/Loadtime3_name"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.432"
-            app:layout_constraintStart_toEndOf="@+id/videoView3"
-            app:layout_constraintTop_toBottomOf="@+id/Vazao3_name"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Loadtime3_data"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.423"
-            app:layout_constraintStart_toEndOf="@+id/videoView3"
-            app:layout_constraintTop_toBottomOf="@+id/Loadtime3_name"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Avarage_Output"
-            android:layout_width="95dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.189"
-            app:layout_constraintStart_toStartOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/loadtime3_name"
-            app:layout_constraintVertical_bias="0.0" />
-
-        <TextView
-            android:id="@+id/Avarage_Loadtime"
-            android:layout_width="95dp"
-            android:layout_height="20dp"
-            android:layout_marginTop="8dp"
-            android:text=" "
-            android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.724"
-            app:layout_constraintStart_toEndOf="@+id/Avarage_Output"
-            app:layout_constraintTop_toBottomOf="@+id/loadtime3_name"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.338"
+            app:layout_constraintStart_toEndOf="@+id/Loadtime1_name"
+            app:layout_constraintTop_toBottomOf="@+id/Vazao1_data"
+            app:layout_constraintVertical_bias="0.061" />
 
         <TextView
             android:id="@+id/RSRQ_data"
@@ -609,11 +383,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="34dp"
             android:layout_marginTop="12dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_radio"
             app:layout_constraintEnd_toEndOf="@+id/background_radio"
-            app:layout_constraintHorizontal_bias="0.434"
+            app:layout_constraintHorizontal_bias="0.44"
             app:layout_constraintStart_toStartOf="@+id/background_radio"
             app:layout_constraintTop_toBottomOf="@+id/RSRQ_name"
             app:layout_constraintVertical_bias="0.0" />
@@ -624,11 +398,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="34dp"
             android:layout_marginTop="12dp"
-            android:text=" "
+            android:text="0"
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_radio"
             app:layout_constraintEnd_toEndOf="@+id/background_radio"
-            app:layout_constraintHorizontal_bias="0.887"
+            app:layout_constraintHorizontal_bias="0.856"
             app:layout_constraintStart_toStartOf="@+id/background_radio"
             app:layout_constraintTop_toBottomOf="@+id/SNR_name"
             app:layout_constraintVertical_bias="0.0" />
@@ -640,34 +414,25 @@
             android:layout_marginTop="36dp"
             app:layout_constraintBottom_toTopOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.136"
+            app:layout_constraintHorizontal_bias="0.038"
             app:layout_constraintStart_toStartOf="@+id/background_stream"
             app:layout_constraintTop_toBottomOf="@+id/title_stream"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.164" />
 
-        <VideoView
-            android:id="@+id/videoView2"
-            android:layout_width="157sp"
-            android:layout_height="105sp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Counter: "
+            android:textColor="#ECE2E2"
+            android:textSize="16sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.136"
-            app:layout_constraintStart_toStartOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/videoView1"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintHorizontal_bias="0.072"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
+            app:layout_constraintTop_toBottomOf="@+id/title_stream" />
 
-        <VideoView
-            android:id="@+id/videoView3"
-            android:layout_width="157sp"
-            android:layout_height="105sp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
-            app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.147"
-            app:layout_constraintStart_toStartOf="@+id/background_stream"
-            app:layout_constraintTop_toBottomOf="@+id/videoView2"
-            app:layout_constraintVertical_bias="0.0" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
