@@ -37,8 +37,7 @@ public class TestActivity extends AppCompatActivity {
     TextView Average_Output, Average_Loadtime;
     VideoView videoView1, videoView2, videoView3;
     Button bt_stop;
-    String server_ip_Value, csv_name_Value, samples_number_Value;
-    String stream_number_Value;
+    String server_ip_Value, csv_name_Value, samples_number_Value, quality_video_value;
     int counter;
 
     @Override
@@ -72,15 +71,13 @@ public class TestActivity extends AppCompatActivity {
         server_ip_Value = StorageClass.server_ip_Value;
         csv_name_Value = StorageClass.csv_name_Value;
         samples_number_Value = StorageClass.samples_number_Value;
-        stream_number_Value = StorageClass.stream_number_Value;
-        String quality_switch_Value = StorageClass.quality_switch_Value;
+        quality_video_value = StorageClass.quality_video_value;
 
 
         Log.d("Storage Class", "server_ip_Value: " + server_ip_Value);
         Log.d("Storage Class", "csv_name_Value: " + csv_name_Value);
         Log.d("Storage Class", "samples_number_Value: " + samples_number_Value);
-        Log.d("Storage Class", "stream_number_Value: " + stream_number_Value);
-        Log.d("Storage Class", "quality_switch_Value: " + quality_switch_Value);
+        Log.d("Storage Class", "quality_video_value: " + quality_video_value);
 
         // exibir o AlertDialog quando o botão for clicadp
         bt_stop.setOnClickListener(v -> showSaveTestDialog());
@@ -93,7 +90,7 @@ public class TestActivity extends AppCompatActivity {
             public void run() {
                 try {
                     // URL do servidor Python
-                    String serverURL = "http://192.168.70.135:3001/registrar_dados";
+                    String serverURL = "http://192.168.73.135:3001/registrar_dados";
 
                     // Criar objeto URL com a URL do servidor
                     URL url = new URL(serverURL);
@@ -152,11 +149,7 @@ public class TestActivity extends AppCompatActivity {
         videoView1 = findViewById(R.id.videoView1);
         videoView2 = findViewById(R.id.videoView2);
         videoView3 = findViewById(R.id.videoView3);
-
-        int numSamples = 2;
-        //for (counter=0;counter < numSamples;counter++){
-
-
+        
         round.setText(String.valueOf(counter));
         Log.d("Initialize App", "Round: " + counter);
         Map<String, Object> dados = new HashMap<>();
@@ -230,7 +223,7 @@ public class TestActivity extends AppCompatActivity {
 //                        Log.d("Handle", "Enviou o csv");
 
 //                        Log.d("Handle", "samples: " + samples_number_Value);
-                        int numSamples = 2;
+                        int numSamples = Integer.parseInt(samples_number_Value);
                         if(counter < numSamples){
                             Log.d("Handle", "Entrou no if");
                             counter +=1;
@@ -241,7 +234,7 @@ public class TestActivity extends AppCompatActivity {
                 }
             }
         };
-        videoApp[0] = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, handler);
+        videoApp[0] = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, quality_video_value, handler);
 //        videoApp[1] = new VideoApllication(this, videoView2, Vazao2_data, Loadtime2_data, handler);
 //        videoApp[2] = new VideoApllication(this, videoView3, Vazao3_data, Loadtime3_data, handler);
 

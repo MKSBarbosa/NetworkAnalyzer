@@ -26,7 +26,7 @@ public class PingApplication {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String pingCommand = "/system/bin/ping -c 5 192.168.70.135";
+                String pingCommand = "/system/bin/ping -c 5 192.168.73.135";
                 String inputLine;
                 try {
                     Process process  = Runtime.getRuntime().exec(pingCommand);

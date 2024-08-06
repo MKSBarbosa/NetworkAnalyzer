@@ -30,9 +30,20 @@ def salvar_dados_csv(dados):
 def success():
    return 'testando'
 
-@app.route('/video', methods=['GET'])
-def send_video():
-    return send_from_directory(directory="../../Videos", path="teste.mp4", as_attachment=False)
+@app.route('/video/<quality>', methods=['GET'])
+def send_video(quality):
+    video_files = {
+        '1080p': 'teste_1080p.mp4',
+        '2K': 'teste_2k.mp4',
+        '4K': 'teste_4k.mp4'
+    }
+    
+    video_path = video_files.get(quality)
+    
+    if video_path:
+        return send_from_directory(directory="../../../Videos", path=video_path, as_attachment=False)
+    else:
+        return "Quality not supported", 404
 
 @app.route('/registrar_dados', methods=['POST'])
 def registrar_dados():
@@ -51,4 +62,4 @@ def registrar_dados():
         return jsonify({'status': 'erro', 'mensagem': str(e)})
     
 if __name__ == '__main__':
-    app.run(host='192.168.70.135', port=3001)
+    app.run(host='192.168.1.140', port=3001)

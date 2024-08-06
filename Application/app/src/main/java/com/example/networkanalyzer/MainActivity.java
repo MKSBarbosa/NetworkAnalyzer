@@ -14,9 +14,11 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +28,10 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_PHONE_CALL_PERMISSION = 3;
     private static final int REQUEST_STORAGE_PERMISSION = 4;
     private static final int REQUEST_SYSTEM_BIN_PERMISSION = 5;
+    private RadioGroup radioGroup;
+    private RadioButton radioButton;
+    private String radio_value;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +42,30 @@ public class MainActivity extends AppCompatActivity {
 
         Button bt_start = findViewById(R.id.bt_start);
 
-
         // Configurar o primeiro Spinner
         configureSpinner(R.id.samples_number, R.array.array_amostras);
 
-        // Configurar o segundo Spinner
-        configureSpinner(R.id.stream_number, R.array.array_stream);
+        // Inicialize o RadioGroup
+        radioGroup = findViewById(R.id.radioGroup);
+
+        // O listener para verificar qual RadioButton está selecionado:
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                // Verifica qual RadioButton está selecionado
+                radioButton = findViewById(checkedId);
+                Toast.makeText(getApplicationContext(), "Selecionado: " + radioButton.getText(), Toast.LENGTH_SHORT).show();
+                radio_value = radioButton.getText().toString();
+                Log.d("RADIO", "radio selected " + radio_value);
+
+            }
+        });
+
+
 
         //vai para a tela de teste
         bt_start.setOnClickListener(v -> goToTestWindow());
     }
-
 
     private void checkAndRequestPermissions() {
         checkAndRequestPermission(Manifest.permission.ACCESS_FINE_LOCATION, REQUEST_LOCATION_PERMISSION);
@@ -103,12 +122,7 @@ public class MainActivity extends AppCompatActivity {
         Spinner samples_number = findViewById(R.id.samples_number);
         StorageClass.samples_number_Value = samples_number.getSelectedItem().toString();
 
-        Spinner stream_number = findViewById(R.id.stream_number);
-        StorageClass.stream_number_Value = stream_number.getSelectedItem().toString();
-
-        Switch quality_switch = findViewById(R.id.quality_switch);
-        StorageClass.quality_switch_Value = quality_switch.getText().toString();
-
+        StorageClass.quality_video_value = radio_value;
         Intent testWindowIntent = new Intent(this, com.example.networkanalyzer.TestActivity.class);
         startActivity(testWindowIntent);
     }
