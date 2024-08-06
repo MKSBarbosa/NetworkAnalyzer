@@ -11,6 +11,9 @@
     <string name="_4k">4k</string>
 
     <string-array name="array_amostras">
+        <item>1</item>
+        <item>3</item>
+        <item>5</item>
         <item>10</item>
         <item>20</item>
         <item>30</item>

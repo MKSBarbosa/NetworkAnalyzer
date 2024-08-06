@@ -33,14 +33,13 @@ public class VideoApllication {
     public String getLoadtime(){
         return tempoDeCarregamentoValueTextView.getText().toString();
     }
-    public VideoApllication(Context c, VideoView vView1, TextView downValueText, TextView timeDownText, Handler handler){
+    public VideoApllication(Context c, VideoView vView1, TextView downValueText, TextView timeDownText, String quality_video, Handler handler){
         this.context = c;
         this.videoView1 = vView1;
         this.downloadValueTextView = downValueText;
         this.tempoDeCarregamentoValueTextView = timeDownText;
         this.handler = handler;
-
-        this.videoUrl = "http://172.27.9.239:3001/video";
+        this.videoUrl = "http://192.168.1.140:3001/video/"+quality_video;
     }
 
 

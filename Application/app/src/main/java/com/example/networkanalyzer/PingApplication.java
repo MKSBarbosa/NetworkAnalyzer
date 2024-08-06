@@ -12,12 +12,13 @@ import java.util.List;
 public class PingApplication {
 
     TextView pingTextView;
-
     private final Context context;
+    String server_ip;
 
-    public PingApplication(Context context, TextView pv){
+    public PingApplication(Context context, TextView pv, String server_addr){
         this.context = context;
         this.pingTextView = pv;
+        this.server_ip = server_addr;
     }
 
     public int getLatency() {
@@ -26,7 +27,7 @@ public class PingApplication {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                String pingCommand = "/system/bin/ping -c 5 8.8.8.8";
+                String pingCommand = "/system/bin/ping -c 5 "  + server_ip;
                 String inputLine;
                 try {
                     Process process  = Runtime.getRuntime().exec(pingCommand);
@@ -56,6 +57,7 @@ public class PingApplication {
 
         // Calcula a média dos valores RTT
         double sum = 0;
+
         for (double rtt : rttValues) {
             sum += rtt;
         }
