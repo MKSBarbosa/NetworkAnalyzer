@@ -62,4 +62,4 @@ def registrar_dados():
         return jsonify({'status': 'erro', 'mensagem': str(e)})
     
 if __name__ == '__main__':
-    app.run(host='192.168.1.140', port=3001)
+    app.run(host='192.168.70.135', port=3001)
