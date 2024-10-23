@@ -41,7 +41,7 @@ def send_video(quality):
     video_path = video_files.get(quality)
     
     if video_path:
-        return send_from_directory(directory="../../../Videos", path=video_path, as_attachment=False)
+        return send_from_directory(directory="../../Videos", path=video_path, as_attachment=False)
     else:
         return "Quality not supported", 404
 
