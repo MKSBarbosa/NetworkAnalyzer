@@ -13,9 +13,13 @@ NetworkAnalyzer/
 │   └── TesteActivity.java
 ├── apps/
 │   ├── Networkanalizer_v1_0.apk
-└── server/
-    ├── server.py
-    └── speedserver.py
+├── server/
+│   ├── server.py
+│   └── speedserver.py
+└── VideoServerDocker/
+    ├── Dockerfile
+    ├── entrypoint.sh
+    └── README.md
 ```
 
 ## Descrição das aplicações
@@ -36,6 +40,11 @@ Contém o aplicativo Android em Java para uso em dispositivos móveis. Dentro de
 ### Pasta `server`
 1. **server.py**: Servidor de streaming de vídeo e salvamento dos dados em CSV. As opções de vídeo correspondem a 1080p, 2K, e 4K. Deve-se indicar a pasta onde os vídeos estão armazenados; a atual é conforme o desktop.
 2. **speedserver.py**: Em desenvolvimento. Criará uma solução alternativa para o iperf3, a fim de medir a vazão de upload e download.
+
+### Pasta `VideoServerDocker`
+1. **Dockerfile**: Gera a imagem do servidor, instalando todas as dependências e videos necessários.
+2. **entrypoint.sh**: Inicializa o server quando o container é inicializado.
+3. **README.md**: Informar as intruções de uso deste container. Vale ressaltar que o container foi desenvolvido para operar em redes móveis baseadas em docker, para utilizar outras redes, tais como wi-fi torna-se necessário adaptar o código, por exemplo mudar a rede para o network_mode:host, e remover as depências.
 
 ## Instruções de Uso
 
