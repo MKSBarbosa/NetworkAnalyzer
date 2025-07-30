@@ -1,0 +1,23 @@
+version: '3'  
+services:
+  ext-dn:
+    build: ./
+    privileged: true
+    container_name: video_server
+    image: docker_video_server
+    volumes:
+      - ./entrypoint.sh:/tmp/entrypoint.sh
+      - ../server/server.py:/NetworkAnalyzer/server/server.py
+    entrypoint: ./tmp/entrypoint.sh
+    ports:
+      - "3001:3001"
+    networks:
+      traffic_net:
+        ipv4_address: 192.168.70.135
+
+networks:
+  traffic_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.70.0/24

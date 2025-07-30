@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.example.networkanalyzer"
         minSdkVersion 30
-        targetSdkVersion 30
+        targetSdkVersion 34
         versionCode 1
         versionName "1.0"
 
