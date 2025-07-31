@@ -129,27 +129,6 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void initializeApplications() {
-        videoView1.stopPlayback();
-
-        round.setText(String.valueOf(counter));
-        Log.d("Initialize App", "Round: " + counter);
-
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("id", csv_name_Value);
-
-        PingApplication pingApp = new PingApplication(this, Ping_data, server_ip_Value);
-        int latency = pingApp.getLatency();
-        dados.put("ping", latency);
-
-        RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
-        RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
-        dados.put("rsrp", radioInfo.getRsrp());
-        dados.put("rsrq", radioInfo.getRsrq());
-        dados.put("snr", radioInfo.getSnr());
-
-        dados.put("upload", 0);
-        dados.put("download", 0);
-
         if (StorageClass.is_vod_enabled) {
             VoDApplication vodApp = new VoDApplication(this, videoView1, Vazao1_data, Loadtime1_data,
                     StorageClass.server_ip_Value, StorageClass.quality_video_value, video_time, round,
@@ -178,6 +157,26 @@ public class TestActivity extends AppCompatActivity {
                     });
             vodApp.start();
         } else {
+            videoView1.stopPlayback();
+
+            round.setText(String.valueOf(counter));
+            Log.d("Initialize App", "Round: " + counter);
+
+            Map<String, Object> dados = new HashMap<>();
+            dados.put("id", csv_name_Value);
+
+            PingApplication pingApp = new PingApplication(this, Ping_data, server_ip_Value);
+            int latency = pingApp.getLatency();
+            dados.put("ping", latency);
+
+            RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
+            RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
+            dados.put("rsrp", radioInfo.getRsrp());
+            dados.put("rsrq", radioInfo.getRsrq());
+            dados.put("snr", radioInfo.getSnr());
+
+            dados.put("upload", 0);
+            dados.put("download", 0);
             VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
                 @Override
                 public void handleMessage(@NonNull Message msg) {
