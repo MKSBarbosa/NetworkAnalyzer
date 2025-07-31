@@ -33,12 +33,11 @@ public class VoDApplication {
 
     private File nextChunkFile = null;
     private int nextChunkIndex = -1;  // -1 = nenhum ainda
-
-
+    private final VoDDataCallback dataCallback;
 
     public VoDApplication(Context context, VideoView videoView,
                                 TextView downloadView, TextView tempoView,
-                                String serverIp, String quality, TextView video_time, TextView counter_chunck) {
+                                String serverIp, String quality, TextView video_time, TextView counter_chunck, VoDDataCallback callback) {
         this.context = context;
         this.videoView = videoView;
         this.downloadValueTextView = downloadView;
@@ -46,6 +45,7 @@ public class VoDApplication {
         this.videoUrl = "http://" + serverIp + ":3001/vod/" + quality+"/chunks/";
         this.VideoDurationTimeTextView = video_time;
         this.VideoChunckCountingView = counter_chunck;
+        this.dataCallback = callback;
     }
 
     public void start() {
@@ -77,7 +77,9 @@ public class VoDApplication {
 
                     monitorPlaybackProgress(finalChunkIndex);
                 });
-
+                if (dataCallback != null) {
+                    dataCallback.onChunkDownloaded(bandwidth, downloadTimeSec, chunkIndex);
+                }
             } catch (Exception e) {
                 Log.e("VoD", "Erro ao baixar ou tocar chunk", e);
             }
@@ -143,12 +145,27 @@ public class VoDApplication {
 
                     new Thread(() -> {
                         try {
+
+                            long startTime = System.currentTimeMillis();
                             nextChunkFile = downloadChunk(targetIndex);
+                            long endTime = System.currentTimeMillis();
+
+                            double downloadTimeSec = (endTime - startTime) / 1000.0;
+                            double chunkSizeMB = nextChunkFile.length() / (1024.0 * 1024.0);
+                            double bandwidth = chunkSizeMB * 8 / downloadTimeSec; // Mbps
+
+                            ((Activity) context).runOnUiThread(() -> {
+                                downloadValueTextView.setText(String.format(Locale.US, "%.2f Mbps", bandwidth));
+                                tempoDeCarregamentoValueTextView.setText(String.format(Locale.US, "%.2f s", downloadTimeSec));
+                            });
                             isNextChunkReady = true;
 
                             // ✅ Aqui é o momento certo de marcar o próximo index e liberar o flag
                             isNextChunkDownloading = false;
                             nextChunkIndex = targetIndex;
+                            if (dataCallback != null) {
+                                dataCallback.onChunkDownloaded(bandwidth, downloadTimeSec, chunkIndex);
+                            }
 
                             Log.d("VoD", "Pré-download do chunk " + targetIndex + " concluído.");
                         } catch (IOException e) {
@@ -175,5 +192,7 @@ public class VoDApplication {
         });
     }
 
-
+    public interface VoDDataCallback {
+        void onChunkDownloaded(double throughputMbps, double loadTimeSec, int chunkIndex);
+    }
 }

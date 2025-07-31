@@ -152,7 +152,30 @@ public class TestActivity extends AppCompatActivity {
 
         if (StorageClass.is_vod_enabled) {
             VoDApplication vodApp = new VoDApplication(this, videoView1, Vazao1_data, Loadtime1_data,
-                    StorageClass.server_ip_Value, StorageClass.quality_video_value, video_time, round);
+                    StorageClass.server_ip_Value, StorageClass.quality_video_value, video_time, round,
+                    (throughput, loadTime, chunkIdx) -> {
+                        runOnUiThread(() -> {
+                            Map<String, Object> dadosVoD = new HashMap<>();
+                            dadosVoD.put("id", csv_name_Value + "_chunk_" + chunkIdx);
+
+                            RadioApplication radioAppVOD = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
+                            RadioApplication.nTuple radioInfoVOD = radioAppVOD.updateRadioInfo(this);
+                            dadosVoD.put("rsrp", radioInfoVOD.getRsrp());
+                            dadosVoD.put("rsrq", radioInfoVOD.getRsrq());
+                            dadosVoD.put("snr", radioInfoVOD.getSnr());
+
+                            PingApplication pingAppVoD = new PingApplication(this, Ping_data, server_ip_Value);
+                            int latencyVoD = pingAppVoD.getLatency();
+                            dadosVoD.put("ping", latencyVoD);
+
+                            dadosVoD.put("upload", 0);
+                            dadosVoD.put("download", 0);
+                            dadosVoD.put("vazao", throughput);
+                            dadosVoD.put("tempoDeCarregamento", loadTime);
+
+                            sendCSV(dadosVoD);
+                        });
+                    });
             vodApp.start();
         } else {
             VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
@@ -183,8 +206,6 @@ public class TestActivity extends AppCompatActivity {
             });
             new Thread(videoApp::fetchAndDisplayVideo).start();
         }
-
-
     }
 
     private void showSaveTestDialog() {
