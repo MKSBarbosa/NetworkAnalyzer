@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data;
-    TextView round;
+    TextView round, video_time;
     TextView Vazao1_data, Loadtime1_data;
     VideoView videoView1;
     Button bt_stop;
@@ -70,6 +71,7 @@ public class TestActivity extends AppCompatActivity {
         videoView1 = findViewById(R.id.videoView1);
         bt_stop = findViewById(R.id.bt_stop);
         round = findViewById(R.id.counter);
+        video_time = findViewById(R.id.Videotime1_data);
     }
 
     private void retrieveStorageValues() {
@@ -150,7 +152,7 @@ public class TestActivity extends AppCompatActivity {
 
         if (StorageClass.is_vod_enabled) {
             VoDApplication vodApp = new VoDApplication(this, videoView1, Vazao1_data, Loadtime1_data,
-                    StorageClass.server_ip_Value, StorageClass.quality_video_value);
+                    StorageClass.server_ip_Value, StorageClass.quality_video_value, video_time, round);
             vodApp.start();
         } else {
             VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {

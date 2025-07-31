@@ -22,22 +22,30 @@ public class VoDApplication {
     private final Context context;
     private final VideoView videoView;
     private final TextView downloadValueTextView;
-    private final TextView tempoDeCarregamentoValueTextView;
+    private final TextView tempoDeCarregamentoValueTextView, VideoDurationTimeTextView, VideoChunckCountingView;
     private final String videoUrl;
     private final Handler progressHandler = new Handler();
     private int currentChunkIndex = 0;
+    private  int videoFullTimeMs = 0;
     private boolean isNextChunkDownloading = false;
+
+    private boolean isNextChunkReady = false;
+
     private File nextChunkFile = null;
+    private int nextChunkIndex = -1;  // -1 = nenhum ainda
+
 
 
     public VoDApplication(Context context, VideoView videoView,
                                 TextView downloadView, TextView tempoView,
-                                String serverIp, String quality) {
+                                String serverIp, String quality, TextView video_time, TextView counter_chunck) {
         this.context = context;
         this.videoView = videoView;
         this.downloadValueTextView = downloadView;
         this.tempoDeCarregamentoValueTextView = tempoView;
         this.videoUrl = "http://" + serverIp + ":3001/vod/" + quality+"/chunks/";
+        this.VideoDurationTimeTextView = video_time;
+        this.VideoChunckCountingView = counter_chunck;
     }
 
     public void start() {
@@ -47,8 +55,8 @@ public class VoDApplication {
     private void downloadAndPlayChunk(int chunkIndex) {
         new Thread(() -> {
             try {
-                    Log.d("VoD", "Baixando chunk " + chunkIndex);
 
+                Log.d("VoD", "Baixando chunk " + chunkIndex);
                 long startTime = System.currentTimeMillis();
                 File chunkFile = downloadChunk(chunkIndex);
                 long endTime = System.currentTimeMillis();
@@ -97,13 +105,17 @@ public class VoDApplication {
     }
 
     private void monitorPlaybackProgress(int chunkIndex) {
-        isNextChunkDownloading = false;
-
         videoView.setOnCompletionListener(mp -> {
             currentChunkIndex++;
-            if (nextChunkFile != null && nextChunkFile.exists()) {
+            VideoChunckCountingView.setText(String.valueOf(currentChunkIndex));
+
+            if (isNextChunkReady && nextChunkFile != null && nextChunkFile.exists()) {
                 playChunk(nextChunkFile);
+                // Reset flags
+                nextChunkFile = null;
+                isNextChunkReady = false;
             } else {
+                Log.w("VoD", "Chunk não pré-baixado, iniciando download padrão...");
                 downloadAndPlayChunk(currentChunkIndex);
             }
         });
@@ -118,22 +130,36 @@ public class VoDApplication {
 
                 int duration = videoView.getDuration();
                 int current = videoView.getCurrentPosition();
+//                videoFullTimeMs += duration;
+//                Log.d("VoD", "Tempo total contínuo até agora: " + (videoFullTimeMs / 1000.0) + " segundos");
+//                VideoDurationTimeTextView.setText(String.valueOf(videoFullTimeMs / 1000.0));
 
-                if (duration > 0 && current >= (duration / 2) && !isNextChunkDownloading) {
-                    isNextChunkDownloading = true;
+                int targetIndex = currentChunkIndex + 1;
 
+                if (duration > 0 && current >= (duration/2) && !isNextChunkDownloading && nextChunkIndex != targetIndex) {
                     // ✅ Pré-download em nova thread
+                    isNextChunkDownloading = true;
+                    nextChunkIndex = targetIndex;
+
                     new Thread(() -> {
                         try {
-                            nextChunkFile = downloadChunk(currentChunkIndex + 1);
-                            Log.d("VoD", "Pré-download do chunk " + (currentChunkIndex + 1) + " concluído.");
+                            nextChunkFile = downloadChunk(targetIndex);
+                            isNextChunkReady = true;
+
+                            // ✅ Aqui é o momento certo de marcar o próximo index e liberar o flag
+                            isNextChunkDownloading = false;
+                            nextChunkIndex = targetIndex;
+
+                            Log.d("VoD", "Pré-download do chunk " + targetIndex + " concluído.");
                         } catch (IOException e) {
                             Log.e("VoD", "Erro no pré-download", e);
                             nextChunkFile = null;
+                            isNextChunkReady = false;
+                            isNextChunkDownloading = false;
                         }
                     }).start();
-                }
 
+                }
                 if (videoView.isPlaying()) {
                     progressHandler.postDelayed(this, 500);
                 }
@@ -145,7 +171,7 @@ public class VoDApplication {
         ((Activity) context).runOnUiThread(() -> {
             videoView.setVideoPath(chunkFile.getAbsolutePath());
             videoView.start();
-            monitorPlaybackProgress(currentChunkIndex);  // continuar monitorando
+            monitorPlaybackProgress(currentChunkIndex);
         });
     }
 
