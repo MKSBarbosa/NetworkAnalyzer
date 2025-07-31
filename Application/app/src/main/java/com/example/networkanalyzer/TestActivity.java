@@ -37,6 +37,7 @@ public class TestActivity extends AppCompatActivity {
     VideoView videoView1;
     Button bt_stop;
     String server_ip_Value, csv_name_Value, samples_number_Value, quality_video_value;
+    boolean is_vod_enabled;
     int counter;
 
     @Override
@@ -76,6 +77,7 @@ public class TestActivity extends AppCompatActivity {
         csv_name_Value = StorageClass.csv_name_Value;
         samples_number_Value = StorageClass.samples_number_Value;
         quality_video_value = StorageClass.quality_video_value;
+        is_vod_enabled = StorageClass.is_vod_enabled;
     }
 
     private void LogStorageValues() {
@@ -83,6 +85,7 @@ public class TestActivity extends AppCompatActivity {
         Log.d("Storage Class", "csv_name_Value: " + csv_name_Value);
         Log.d("Storage Class", "samples_number_Value: " + samples_number_Value);
         Log.d("Storage Class", "quality_video_value: " + quality_video_value);
+        Log.d("Storage Class", "is_vod_enabled: " + is_vod_enabled);
     }
 
     private void sendCSV(Map<String, Object> dados) {

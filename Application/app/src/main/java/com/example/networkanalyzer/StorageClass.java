@@ -5,4 +5,5 @@ public class StorageClass {
     public static String csv_name_Value = "";
     public static String samples_number_Value = "";
     public static String quality_video_value = "";
+    public  static  boolean is_vod_enabled = false;
 }
