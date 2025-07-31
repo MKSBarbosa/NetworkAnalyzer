@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,11 +33,12 @@ import java.util.Map;
 public class TestActivity extends AppCompatActivity {
 
     TextView RSRP_data, RSRQ_data, SNR_data, Ping_data, Download_data, Upload_data;
-    TextView round;
+    TextView round, video_time;
     TextView Vazao1_data, Loadtime1_data;
     VideoView videoView1;
     Button bt_stop;
     String server_ip_Value, csv_name_Value, samples_number_Value, quality_video_value;
+    boolean is_vod_enabled;
     int counter;
 
     @Override
@@ -69,6 +71,7 @@ public class TestActivity extends AppCompatActivity {
         videoView1 = findViewById(R.id.videoView1);
         bt_stop = findViewById(R.id.bt_stop);
         round = findViewById(R.id.counter);
+        video_time = findViewById(R.id.Videotime1_data);
     }
 
     private void retrieveStorageValues() {
@@ -76,6 +79,7 @@ public class TestActivity extends AppCompatActivity {
         csv_name_Value = StorageClass.csv_name_Value;
         samples_number_Value = StorageClass.samples_number_Value;
         quality_video_value = StorageClass.quality_video_value;
+        is_vod_enabled = StorageClass.is_vod_enabled;
     }
 
     private void LogStorageValues() {
@@ -83,6 +87,7 @@ public class TestActivity extends AppCompatActivity {
         Log.d("Storage Class", "csv_name_Value: " + csv_name_Value);
         Log.d("Storage Class", "samples_number_Value: " + samples_number_Value);
         Log.d("Storage Class", "quality_video_value: " + quality_video_value);
+        Log.d("Storage Class", "is_vod_enabled: " + is_vod_enabled);
     }
 
     private void sendCSV(Map<String, Object> dados) {
@@ -124,55 +129,82 @@ public class TestActivity extends AppCompatActivity {
     }
 
     private void initializeApplications() {
-        videoView1.stopPlayback();
+        if (StorageClass.is_vod_enabled) {
+            VoDApplication vodApp = new VoDApplication(this, videoView1, Vazao1_data, Loadtime1_data,
+                    StorageClass.server_ip_Value, StorageClass.quality_video_value, video_time, round,
+                    (throughput, loadTime, chunkIdx) -> {
+                        runOnUiThread(() -> {
+                            Map<String, Object> dadosVoD = new HashMap<>();
+                            dadosVoD.put("id", csv_name_Value + "_chunk_" + chunkIdx);
 
-        round.setText(String.valueOf(counter));
-        Log.d("Initialize App", "Round: " + counter);
+                            RadioApplication radioAppVOD = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
+                            RadioApplication.nTuple radioInfoVOD = radioAppVOD.updateRadioInfo(this);
+                            dadosVoD.put("rsrp", radioInfoVOD.getRsrp());
+                            dadosVoD.put("rsrq", radioInfoVOD.getRsrq());
+                            dadosVoD.put("snr", radioInfoVOD.getSnr());
 
-        Map<String, Object> dados = new HashMap<>();
-        dados.put("id", csv_name_Value);
+                            PingApplication pingAppVoD = new PingApplication(this, Ping_data, server_ip_Value);
+                            int latencyVoD = pingAppVoD.getLatency();
+                            dadosVoD.put("ping", latencyVoD);
 
-        PingApplication pingApp = new PingApplication(this, Ping_data, server_ip_Value);
-        int latency = pingApp.getLatency();
-        dados.put("ping", latency);
+                            dadosVoD.put("upload", 0);
+                            dadosVoD.put("download", 0);
+                            dadosVoD.put("vazao", throughput);
+                            dadosVoD.put("tempoDeCarregamento", loadTime);
 
-        RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
-        RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
-        dados.put("rsrp", radioInfo.getRsrp());
-        dados.put("rsrq", radioInfo.getRsrq());
-        dados.put("snr", radioInfo.getSnr());
+                            sendCSV(dadosVoD);
+                        });
+                    });
+            vodApp.start();
+        } else {
+            videoView1.stopPlayback();
 
-        dados.put("upload", 0);
-        dados.put("download", 0);
+            round.setText(String.valueOf(counter));
+            Log.d("Initialize App", "Round: " + counter);
 
-        VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 1) {
-                    Bundle bundle = msg.getData();
-                    VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
-                    if (receivedTuple != null) {
-                        double averageThroughput = receivedTuple.getDownloadValue();
-                        double averageLoadTime = receivedTuple.getLoadTimeValue();
-                        // Atualiza os TextViews Vazao1_data e Loadtime1_data
-                        Vazao1_data.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput));
-                        Loadtime1_data.setText(String.format(Locale.US, "%.2f s", averageLoadTime));
+            Map<String, Object> dados = new HashMap<>();
+            dados.put("id", csv_name_Value);
 
-                        dados.put("vazao", averageThroughput);
-                        dados.put("tempoDeCarregamento", averageLoadTime);
-                        sendCSV(dados);
+            PingApplication pingApp = new PingApplication(this, Ping_data, server_ip_Value);
+            int latency = pingApp.getLatency();
+            dados.put("ping", latency);
 
-                        int numSamples = Integer.parseInt(samples_number_Value);
-                        if (counter < numSamples) {
-                            counter++;
-                            initializeApplications();
+            RadioApplication radioApp = new RadioApplication(RSRP_data, RSRQ_data, SNR_data);
+            RadioApplication.nTuple radioInfo = radioApp.updateRadioInfo(this);
+            dados.put("rsrp", radioInfo.getRsrp());
+            dados.put("rsrq", radioInfo.getRsrq());
+            dados.put("snr", radioInfo.getSnr());
+
+            dados.put("upload", 0);
+            dados.put("download", 0);
+            VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    if (msg.what == 1) {
+                        Bundle bundle = msg.getData();
+                        VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
+                        if (receivedTuple != null) {
+                            double averageThroughput = receivedTuple.getDownloadValue();
+                            double averageLoadTime = receivedTuple.getLoadTimeValue();
+                            // Atualiza os TextViews Vazao1_data e Loadtime1_data
+                            Vazao1_data.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput));
+                            Loadtime1_data.setText(String.format(Locale.US, "%.2f s", averageLoadTime));
+
+                            dados.put("vazao", averageThroughput);
+                            dados.put("tempoDeCarregamento", averageLoadTime);
+                            sendCSV(dados);
+
+                            int numSamples = Integer.parseInt(samples_number_Value);
+                            if (numSamples != 1 && counter < numSamples) {
+                                counter++;
+                                initializeApplications();
+                            }
                         }
                     }
                 }
-            }
-        });
-
-        new Thread(videoApp::fetchAndDisplayVideo).start();
+            });
+            new Thread(videoApp::fetchAndDisplayVideo).start();
+        }
     }
 
     private void showSaveTestDialog() {

@@ -128,12 +128,27 @@
             android:textColor="#ECE2E2"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintBottom_toTopOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
             app:layout_constraintHorizontal_bias="0.061"
             app:layout_constraintStart_toEndOf="@+id/videoView1"
             app:layout_constraintTop_toBottomOf="@+id/Vazao1_name"
             app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/Videotime1_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Video Time:"
+            android:textColor="#ECE2E2"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintHorizontal_bias="0.065"
+            app:layout_constraintStart_toEndOf="@+id/videoView1"
+            app:layout_constraintTop_toBottomOf="@+id/Loadtime1_name"
+            app:layout_constraintVertical_bias="0.166" />
 
         <TextView
             android:id="@+id/Upload_name"
@@ -359,7 +374,7 @@
             android:textColor="#ECE2E2"
             app:layout_constraintBottom_toBottomOf="@+id/background_stream"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.366"
+            app:layout_constraintHorizontal_bias="0.345"
             app:layout_constraintStart_toEndOf="@+id/Vazao1_name"
             app:layout_constraintTop_toBottomOf="@+id/counter"
             app:layout_constraintVertical_bias="0.042" />
@@ -370,12 +385,24 @@
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="#ECE2E2"
-            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintBottom_toTopOf="@+id/Videotime1_data"
             app:layout_constraintEnd_toEndOf="@+id/background_stream"
-            app:layout_constraintHorizontal_bias="0.338"
+            app:layout_constraintHorizontal_bias="0.337"
             app:layout_constraintStart_toEndOf="@+id/Loadtime1_name"
             app:layout_constraintTop_toBottomOf="@+id/Vazao1_data"
             app:layout_constraintVertical_bias="0.061" />
+
+        <TextView
+            android:id="@+id/Videotime1_data"
+            android:layout_width="14dp"
+            android:layout_height="21dp"
+            android:layout_marginBottom="20dp"
+            android:text="0"
+            android:textColor="#ECE2E2"
+            app:layout_constraintBottom_toBottomOf="@+id/background_stream"
+            app:layout_constraintEnd_toEndOf="@+id/background_stream"
+            app:layout_constraintHorizontal_bias="0.309"
+            app:layout_constraintStart_toEndOf="@+id/Videotime1_name" />
 
         <TextView
             android:id="@+id/RSRQ_data"

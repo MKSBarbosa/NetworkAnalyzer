@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -14,6 +15,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.RadioButton;
@@ -32,16 +34,13 @@ public class MainActivity extends AppCompatActivity {
     private RadioButton radioButton;
     private String radio_value;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         checkAndRequestPermissions();
 
         setContentView(R.layout.activity_main);
-
         Button bt_start = findViewById(R.id.bt_start);
-
         // Configurar o primeiro Spinner
         configureSpinner(R.id.samples_number, R.array.array_amostras);
 
@@ -123,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
         StorageClass.samples_number_Value = samples_number.getSelectedItem().toString();
 
         StorageClass.quality_video_value = radio_value;
+
+        @SuppressLint("UseSwitchCompatOrMaterialCode")
+        Switch switch_vod_status = findViewById(R.id.switch_vod);
+        StorageClass.is_vod_enabled = switch_vod_status.isChecked();
+
         Intent testWindowIntent = new Intent(this, com.example.networkanalyzer.TestActivity.class);
         startActivity(testWindowIntent);
     }
