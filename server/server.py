@@ -2,12 +2,32 @@
 import os
 import re
 import csv
+from subprocess import run
 from flask import Flask, send_from_directory, request, jsonify, Response, abort
 
 app = Flask(__name__)
 
 nome_arquivo_csv = 'dados.csv'
 VIDEO_DIR = "../../../Videos"
+CHUNKS_DIR_1080P = "/chunks_1080p"
+CHUNKS_DIR_2K = "/chunks_2k"
+
+CHUNK_DURATION = 10  # segundos
+
+VIDEO_CONFIG = {
+    "1080p": {
+        "source": os.path.join(VIDEO_DIR, "teste_1080p.mp4"),
+        "chunks_dir": os.path.join(VIDEO_DIR, "chunks_1080p")
+    },
+    "2K": {
+        "source": os.path.join(VIDEO_DIR, "teste_2k.mp4"),
+        "chunks_dir": os.path.join(VIDEO_DIR, "chunks_2k")
+    },
+    "4K": {
+        "source": os.path.join(VIDEO_DIR, "teste_4k.mp4"),  # opcional
+        "chunks_dir": os.path.join(VIDEO_DIR, "chunks_4k")
+    }
+}
 
 def salvar_dados_csv(dados):
     arquivo_existe = False
@@ -29,6 +49,40 @@ def salvar_dados_csv(dados):
 @app.route('/teste')
 def success():
    return 'testando'
+
+
+@app.route("/vod/<quality>/chunks/<int:chunk_index>")
+def serve_video_chunk(quality, chunk_index):
+    config = VIDEO_CONFIG.get(quality)
+    if not config:
+        abort(404, description="Qualidade não suportada")
+
+    chunks_dir = config["chunks_dir"]
+    video_source = config["source"]
+
+    os.makedirs(chunks_dir, exist_ok=True)
+
+    chunk_filename = f"chunk_{chunk_index:03d}.mp4"
+    chunk_path = os.path.join(chunks_dir, chunk_filename)
+
+    if not os.path.exists(chunk_path):
+        # Gerar dinamicamente com ffmpeg
+        start_time = chunk_index * CHUNK_DURATION
+        command = [
+            "ffmpeg",
+            "-ss", str(start_time),
+            "-i", video_source,
+            "-t", str(CHUNK_DURATION),
+            "-c", "copy",
+            chunk_path,
+            "-y"
+        ]
+        result = run(command)
+
+        if result.returncode != 0 or not os.path.exists(chunk_path):
+            abort(500, description="Erro ao gerar chunk")
+
+    return send_from_directory(chunks_dir, chunk_filename)
 
 @app.route('/vod/<quality>')
 def stream_video(quality):

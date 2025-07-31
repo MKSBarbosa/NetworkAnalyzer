@@ -2,8 +2,12 @@ package com.example.networkanalyzer;
 
 import android.app.Activity;
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Handler;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -12,104 +16,138 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Locale;
-import java.util.logging.Handler;
 
 public class VoDApplication {
 
     private final Context context;
-    private final String videoUrl;
+    private final VideoView videoView;
     private final TextView downloadValueTextView;
     private final TextView tempoDeCarregamentoValueTextView;
-    private final int chunkSize = 5 * 1024 * 1024; // 5 MB por chunk
+    private final String videoUrl;
+    private final Handler progressHandler = new Handler();
+    private int currentChunkIndex = 0;
+    private boolean isNextChunkDownloading = false;
+    private File nextChunkFile = null;
 
-    public VoDApplication(Context context, TextView downloadView, TextView loadTimeView,
-                          String server_ip, String quality) {
+
+    public VoDApplication(Context context, VideoView videoView,
+                                TextView downloadView, TextView tempoView,
+                                String serverIp, String quality) {
         this.context = context;
+        this.videoView = videoView;
         this.downloadValueTextView = downloadView;
-        this.tempoDeCarregamentoValueTextView = loadTimeView;
-        this.videoUrl = "http://" + server_ip + ":3001/vod/" + quality;
+        this.tempoDeCarregamentoValueTextView = tempoView;
+        this.videoUrl = "http://" + serverIp + ":3001/vod/" + quality+"/chunks/";
     }
 
-    public void fetchAndDownloadInChunks() {
+    public void start() {
+        downloadAndPlayChunk(currentChunkIndex);
+    }
+
+    private void downloadAndPlayChunk(int chunkIndex) {
         new Thread(() -> {
             try {
-                long totalSize = getVideoSize();
-                if (totalSize <= 0) return;
+                    Log.d("VoD", "Baixando chunk " + chunkIndex);
 
-                long startByte = 0;
-                int chunkIndex = 0;
-                double totalDownloadedMB = 0;
-                long totalTime = 0;
+                long startTime = System.currentTimeMillis();
+                File chunkFile = downloadChunk(chunkIndex);
+                long endTime = System.currentTimeMillis();
 
-                File outputFile = new File(context.getCacheDir(), "vod_download.mp4");
-                try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
-                    while (startByte < totalSize) {
-                        long endByte = Math.min(startByte + chunkSize - 1, totalSize - 1);
+                double downloadTimeSec = (endTime - startTime) / 1000.0;
+                double chunkSizeMB = chunkFile.length() / (1024.0 * 1024.0);
+                double bandwidth = chunkSizeMB * 8 / downloadTimeSec; // Mbps
 
-                        long startTime = System.currentTimeMillis();
-                        byte[] chunkData = downloadChunk(startByte, endByte);
-                        long endTime = System.currentTimeMillis();
+                Log.d("VoD", String.format("Chunk %d pronto. %.2f Mbps, %.2f s", chunkIndex, bandwidth, downloadTimeSec));
 
-                        if (chunkData != null) {
-                            outputStream.write(chunkData);
-                            long chunkTime = endTime - startTime;
+                int finalChunkIndex = chunkIndex;
+                ((Activity) context).runOnUiThread(() -> {
+                    downloadValueTextView.setText(String.format(Locale.US, "%.2f Mbps", bandwidth));
+                    tempoDeCarregamentoValueTextView.setText(String.format(Locale.US, "%.2f s", downloadTimeSec));
 
-                            double chunkSizeMB = chunkData.length / (1024.0 * 1024.0);
-                            double bandwidth = chunkSizeMB * 8 / (chunkTime / 1000.0); // Mbps
+                    videoView.setVideoPath(chunkFile.getAbsolutePath());
+                    videoView.start();
 
-                            totalDownloadedMB += chunkSizeMB;
-                            totalTime += chunkTime;
-
-                            Log.d("VoD", "Chunk " + (++chunkIndex) + ": " + bandwidth + " Mbps");
-                        }
-
-                        startByte = endByte + 1;
-                    }
-                }
-
-                double avgBandwidth = totalDownloadedMB * 8 / (totalTime / 1000.0); // Mbps
-                double totalLoadTime = totalTime / 1000.0;
-
-                updateUI(avgBandwidth, totalLoadTime);
+                    monitorPlaybackProgress(finalChunkIndex);
+                });
 
             } catch (Exception e) {
-                Log.e("VoD", "Erro ao baixar vídeo em chunks", e);
+                Log.e("VoD", "Erro ao baixar ou tocar chunk", e);
             }
         }).start();
     }
 
-    private long getVideoSize() throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(videoUrl).openConnection();
-        connection.setRequestMethod("HEAD");
-        connection.connect();
-        long size = connection.getContentLengthLong();
-        connection.disconnect();
-        Log.d("VoD", "Tamanho do vídeo: " + size);
-        return size;
-    }
-
-    private byte[] downloadChunk(long start, long end) throws IOException {
-        HttpURLConnection connection = (HttpURLConnection) new URL(videoUrl).openConnection();
-        connection.setRequestProperty("Range", "bytes=" + start + "-" + end);
+    private File downloadChunk(int next_chunkIndex) throws IOException {
+        String final_video_vod_url = videoUrl+String.valueOf(next_chunkIndex);
+        HttpURLConnection connection = (HttpURLConnection) new URL(final_video_vod_url).openConnection();
         connection.connect();
 
-        try (InputStream input = connection.getInputStream()) {
-            byte[] buffer = new byte[(int)(end - start + 1)];
-            int offset = 0;
-            int read;
+        File chunk_file = new File(context.getCacheDir(), "chunk_" + next_chunkIndex + ".mp4");
+        try (InputStream in = connection.getInputStream();
+             FileOutputStream out = new FileOutputStream(chunk_file)) {
 
-            while ((read = input.read(buffer, offset, buffer.length - offset)) != -1 && offset < buffer.length) {
-                offset += read;
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
             }
-
-            return buffer;
+            connection.disconnect();
+            return chunk_file;
         }
     }
 
-    private void updateUI(double avgBandwidth, double totalLoadTime) {
+    private void monitorPlaybackProgress(int chunkIndex) {
+        isNextChunkDownloading = false;
+
+        videoView.setOnCompletionListener(mp -> {
+            currentChunkIndex++;
+            if (nextChunkFile != null && nextChunkFile.exists()) {
+                playChunk(nextChunkFile);
+            } else {
+                downloadAndPlayChunk(currentChunkIndex);
+            }
+        });
+
+        progressHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (!videoView.isPlaying()) {
+                    progressHandler.postDelayed(this, 500);
+                    return;
+                }
+
+                int duration = videoView.getDuration();
+                int current = videoView.getCurrentPosition();
+
+                if (duration > 0 && current >= (duration / 2) && !isNextChunkDownloading) {
+                    isNextChunkDownloading = true;
+
+                    // ✅ Pré-download em nova thread
+                    new Thread(() -> {
+                        try {
+                            nextChunkFile = downloadChunk(currentChunkIndex + 1);
+                            Log.d("VoD", "Pré-download do chunk " + (currentChunkIndex + 1) + " concluído.");
+                        } catch (IOException e) {
+                            Log.e("VoD", "Erro no pré-download", e);
+                            nextChunkFile = null;
+                        }
+                    }).start();
+                }
+
+                if (videoView.isPlaying()) {
+                    progressHandler.postDelayed(this, 500);
+                }
+            }
+        }, 500);
+    }
+
+    private void playChunk(File chunkFile) {
         ((Activity) context).runOnUiThread(() -> {
-            downloadValueTextView.setText(String.format(Locale.US, "%.2f Mbps", avgBandwidth));
-            tempoDeCarregamentoValueTextView.setText(String.format(Locale.US, "%.2f s", totalLoadTime));
+            videoView.setVideoPath(chunkFile.getAbsolutePath());
+            videoView.start();
+            monitorPlaybackProgress(currentChunkIndex);  // continuar monitorando
         });
     }
+
+
 }

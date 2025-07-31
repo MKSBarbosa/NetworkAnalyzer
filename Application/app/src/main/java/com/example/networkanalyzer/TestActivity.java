@@ -149,9 +149,9 @@ public class TestActivity extends AppCompatActivity {
         dados.put("download", 0);
 
         if (StorageClass.is_vod_enabled) {
-            VoDApplication vodApp = new VoDApplication(this, Vazao1_data, Loadtime1_data,
+            VoDApplication vodApp = new VoDApplication(this, videoView1, Vazao1_data, Loadtime1_data,
                     StorageClass.server_ip_Value, StorageClass.quality_video_value);
-            vodApp.fetchAndDownloadInChunks();
+            vodApp.start();
         } else {
             VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
                 @Override
@@ -181,6 +181,8 @@ public class TestActivity extends AppCompatActivity {
             });
             new Thread(videoApp::fetchAndDisplayVideo).start();
         }
+
+
     }
 
     private void showSaveTestDialog() {
