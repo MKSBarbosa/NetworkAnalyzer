@@ -148,34 +148,39 @@ public class TestActivity extends AppCompatActivity {
         dados.put("upload", 0);
         dados.put("download", 0);
 
-        VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
-            @Override
-            public void handleMessage(@NonNull Message msg) {
-                if (msg.what == 1) {
-                    Bundle bundle = msg.getData();
-                    VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
-                    if (receivedTuple != null) {
-                        double averageThroughput = receivedTuple.getDownloadValue();
-                        double averageLoadTime = receivedTuple.getLoadTimeValue();
-                        // Atualiza os TextViews Vazao1_data e Loadtime1_data
-                        Vazao1_data.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput));
-                        Loadtime1_data.setText(String.format(Locale.US, "%.2f s", averageLoadTime));
+        if (StorageClass.is_vod_enabled) {
+            VoDApplication vodApp = new VoDApplication(this, Vazao1_data, Loadtime1_data,
+                    StorageClass.server_ip_Value, StorageClass.quality_video_value);
+            vodApp.fetchAndDownloadInChunks();
+        } else {
+            VideoApllication videoApp = new VideoApllication(this, videoView1, Vazao1_data, Loadtime1_data, server_ip_Value,quality_video_value, new Handler(Looper.getMainLooper()) {
+                @Override
+                public void handleMessage(@NonNull Message msg) {
+                    if (msg.what == 1) {
+                        Bundle bundle = msg.getData();
+                        VideoApllication.MyTuple receivedTuple = (VideoApllication.MyTuple) bundle.getSerializable("myTuple");
+                        if (receivedTuple != null) {
+                            double averageThroughput = receivedTuple.getDownloadValue();
+                            double averageLoadTime = receivedTuple.getLoadTimeValue();
+                            // Atualiza os TextViews Vazao1_data e Loadtime1_data
+                            Vazao1_data.setText(String.format(Locale.US, "%.2f Mbps", averageThroughput));
+                            Loadtime1_data.setText(String.format(Locale.US, "%.2f s", averageLoadTime));
 
-                        dados.put("vazao", averageThroughput);
-                        dados.put("tempoDeCarregamento", averageLoadTime);
-                        sendCSV(dados);
+                            dados.put("vazao", averageThroughput);
+                            dados.put("tempoDeCarregamento", averageLoadTime);
+                            sendCSV(dados);
 
-                        int numSamples = Integer.parseInt(samples_number_Value);
-                        if (counter < numSamples) {
-                            counter++;
-                            initializeApplications();
+                            int numSamples = Integer.parseInt(samples_number_Value);
+                            if (numSamples != 1 && counter < numSamples) {
+                                counter++;
+                                initializeApplications();
+                            }
                         }
                     }
                 }
-            }
-        });
-
-        new Thread(videoApp::fetchAndDisplayVideo).start();
+            });
+            new Thread(videoApp::fetchAndDisplayVideo).start();
+        }
     }
 
     private void showSaveTestDialog() {

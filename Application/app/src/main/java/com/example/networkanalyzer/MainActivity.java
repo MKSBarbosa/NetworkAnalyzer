@@ -40,10 +40,7 @@ public class MainActivity extends AppCompatActivity {
         checkAndRequestPermissions();
 
         setContentView(R.layout.activity_main);
-
         Button bt_start = findViewById(R.id.bt_start);
-
-
         // Configurar o primeiro Spinner
         configureSpinner(R.id.samples_number, R.array.array_amostras);
 
