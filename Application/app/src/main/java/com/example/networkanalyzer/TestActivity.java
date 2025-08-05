@@ -71,7 +71,6 @@ public class TestActivity extends AppCompatActivity {
         videoView1 = findViewById(R.id.videoView1);
         bt_stop = findViewById(R.id.bt_stop);
         round = findViewById(R.id.counter);
-        video_time = findViewById(R.id.Videotime1_data);
     }
 
     private void retrieveStorageValues() {
